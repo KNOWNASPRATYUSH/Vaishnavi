@@ -41,18 +41,23 @@ function updateLifeCounter() {
     // Total minutes
     const totalMinutes = Math.floor(diffMs / (1000 * 60));
     
+    // Total seconds
+    const totalSeconds = Math.floor(diffMs / 1000);
+    
     // Update DOM elements safely
     const yearsEl = document.getElementById('count-years');
     const daysEl = document.getElementById('count-days');
     const hoursEl = document.getElementById('count-hours');
     const minsEl = document.getElementById('count-minutes');
+    const secsEl = document.getElementById('count-seconds');
 
     if(yearsEl) yearsEl.textContent = years;
     if(daysEl) daysEl.textContent = totalDays.toLocaleString();
     if(hoursEl) hoursEl.textContent = totalHours.toLocaleString();
     if(minsEl) minsEl.textContent = totalMinutes.toLocaleString();
+    if(secsEl) secsEl.textContent = totalSeconds.toLocaleString();
 }
 
-// Initial call and set interval for every minute
+// Initial call and set interval for every second
 updateLifeCounter();
-setInterval(updateLifeCounter, 60000);
+setInterval(updateLifeCounter, 1000);

@@ -270,12 +270,12 @@ body {
 
 .counter-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
 }
 
 @media (max-width: 600px) {
-    .counter-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .counter-grid { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
 }
 
 .counter-item {
