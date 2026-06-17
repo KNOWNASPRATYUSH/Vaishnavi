@@ -513,6 +513,12 @@ body::before {
     50%    { opacity:1; transform:translateX(-50%) scale(1.15); }
 }
 
+@media (max-width: 480px) {
+    /* Mobile typography tweaks for Moment chapter */
+    .moment-quote { font-size: 0.9rem; }
+    .moment-journal p { font-size: 0.9rem; line-height: 1.5; }
+}
+
 .moment-quote {
     max-width: 660px;
     margin: 0 auto 3rem;

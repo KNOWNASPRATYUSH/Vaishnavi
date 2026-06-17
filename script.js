@@ -177,20 +177,37 @@ if (filmWrap) {
     let startX  = 0;
     let scrollL = 0;
 
+    // Mouse events
     filmWrap.addEventListener('mousedown', e => {
         isDown  = true;
         filmWrap.classList.add('active');
         startX  = e.pageX - filmWrap.offsetLeft;
         scrollL = filmWrap.scrollLeft;
     });
-
     filmWrap.addEventListener('mouseleave', () => { isDown = false; filmWrap.classList.remove('active'); });
     filmWrap.addEventListener('mouseup',    () => { isDown = false; filmWrap.classList.remove('active'); });
-
     filmWrap.addEventListener('mousemove', e => {
         if (!isDown) return;
         e.preventDefault();
         const x    = e.pageX - filmWrap.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        filmWrap.scrollLeft = scrollL - walk;
+    });
+
+    // Touch events for mobile
+    filmWrap.addEventListener('touchstart', e => {
+        const touch = e.touches[0];
+        isDown  = true;
+        filmWrap.classList.add('active');
+        startX  = touch.pageX - filmWrap.offsetLeft;
+        scrollL = filmWrap.scrollLeft;
+    });
+    filmWrap.addEventListener('touchend', () => { isDown = false; filmWrap.classList.remove('active'); });
+    filmWrap.addEventListener('touchcancel', () => { isDown = false; filmWrap.classList.remove('active'); });
+    filmWrap.addEventListener('touchmove', e => {
+        if (!isDown) return;
+        const touch = e.touches[0];
+        const x    = touch.pageX - filmWrap.offsetLeft;
         const walk = (x - startX) * 1.5;
         filmWrap.scrollLeft = scrollL - walk;
     });
