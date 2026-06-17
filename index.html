@@ -3,238 +3,406 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vaishnavi - A Beautiful Journey</title>
-    <meta name="description" content="A romantic and elegant website narrating the beautiful life of Vaishnavi and our story.">
-    <!-- Elegant Fonts: Playfair Display for headings, Lora for body text -->
+    <title>Vaishnavi 💕 — A Love Story</title>
+    <meta name="description" content="A cute & bubbly storytelling website dedicated to the beautiful life of Vaishnavi and our love story.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <!-- HERO SECTION -->
-    <section class="hero-section flex-center text-center">
-        <div class="hero-content fade-in-up">
-            <h1 class="title font-playfair">Vaishnavi</h1>
-            <p class="subtitle font-lora">The Story of a Beautiful Soul</p>
-            
-            <div class="intro-quote font-lora italic mt-8">
-                <p>Every person has a story.</p>
-                <p>Some stories inspire. Some stories teach.</p>
-                <p>And some stories quietly become unforgettable.</p>
-            </div>
+    <!-- Floating Background Bubbles -->
+    <div id="bubble-container"></div>
 
-            <!-- HERO IMAGE PLACEHOLDER -->
-            <div class="image-placeholder hero-img mt-8">
-                <span>[ HERO IMAGE PLACEHOLDER ]</span>
-            </div>
+    <!-- NAVBAR -->
+    <nav class="site-nav" aria-label="Main Navigation">
+        <span class="nav-brand">V 💕</span>
+        <ul class="nav-links">
+            <li><a href="#her-story">Her Story</a></li>
+            <li><a href="#who-is-she">About Her</a></li>
+            <li><a href="#our-memories">Memories</a></li>
+            <li><a href="#our-time">Our Time</a></li>
+            <li><a href="#love-letter">Love Note</a></li>
+        </ul>
+    </nav>
 
-            <div class="scroll-indicator animate-pulse mt-12">
-                <span class="font-lora text-xs uppercase tracking-widest text-rose-glow">Scroll to Begin</span>
-            </div>
-        </div>
-    </section>
+    <!-- MAIN CONTENT -->
+    <main class="app-container">
 
-    <!-- TIMELINE: HER STORY -->
-    <section class="timeline-section content-section">
-        <div class="section-container">
-            <div class="text-center mb-16 scroll-reveal">
-                <h2 class="section-title font-playfair">Her Early Chapters</h2>
-                <p class="section-subtitle font-lora italic">Where the magic began</p>
-            </div>
+        <!-- ═══════════════════════════════
+             HERO SECTION
+        ════════════════════════════════ -->
+        <section class="hero-section" id="home">
+            <div class="hero-content">
 
-            <div class="timeline">
-                <!-- Timeline Item 1 -->
-                <div class="timeline-item scroll-reveal">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date font-lora">August 5, 2007</span>
-                        <h3 class="font-playfair">The Beginning</h3>
-                        <p class="font-lora">August 5, 2007. The world didn't shake, but a quiet, beautiful story started. A little girl entered the world, completely unaware of how many lives she would touch, how many dreams she would chase, and the incredible person she would become.</p>
-                        <div class="image-placeholder portrait-img mt-4">
-                            <span>[ CHILDHOOD PHOTO PLACEHOLDER ]</span>
+                <div class="hero-badge">
+                    ✨ Welcome to her beautiful world
+                </div>
+
+                <h1 class="hero-title">Vaishnavi</h1>
+                <p class="hero-subtitle">The most magical person I know 🌸</p>
+
+                <div class="hero-quote-card glass-card">
+                    <p>
+                        Every person has a story. Some stories inspire, some stories teach...
+                        and some stories are so beautifully written that you fall in love
+                        with every single chapter of them.
+                    </p>
+                </div>
+
+                <!-- Hero Image Placeholder -->
+                <div class="hero-img-wrap">
+                    <div class="img-placeholder" style="height: 320px; border-radius: 28px;">
+                        <span class="ph-icon">📸</span>
+                        <span>Your favourite photo goes here</span>
+                    </div>
+                </div>
+
+                <!-- Scroll Down -->
+                <div class="scroll-down-wrap">
+                    <span>Scroll Down</span>
+                    <div class="scroll-arrow"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="section-divider"><hr>💕<hr></div>
+
+        <!-- ═══════════════════════════════
+             CHAPTER 1 — HER EARLY LIFE
+        ════════════════════════════════ -->
+        <section class="content-section" id="her-story">
+            <div class="section-container">
+
+                <div class="section-header reveal">
+                    <div class="section-chip">Chapter 1</div>
+                    <h2 class="section-title">Her Early Chapters</h2>
+                    <p class="section-sub">Where the magic first began 🌟</p>
+                </div>
+
+                <div class="timeline-wrap">
+
+                    <!-- Timeline Item 1 -->
+                    <div class="t-item reveal">
+                        <div class="glass-card t-card">
+                            <div class="t-date">🎂 August 5, 2007</div>
+                            <h3 class="t-title">The Very Beginning</h3>
+                            <p class="t-body">
+                                The world didn't shake. No headlines were written. But quietly, beautifully —
+                                a story began. A little girl entered this world, completely unaware of how
+                                many hearts she would one day fill with warmth, laughter, and the softest love.
+                            </p>
+                            <div class="img-placeholder reveal reveal-delay-1" style="height: 260px; margin-top: 1.5rem;">
+                                <span class="ph-icon">🍼</span>
+                                <span>Childhood photo goes here</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 2 -->
+                    <div class="t-item reveal">
+                        <div class="glass-card t-card">
+                            <div class="t-date">🎒 Growing Up</div>
+                            <h3 class="t-title">Discovering the World</h3>
+                            <p class="t-body">
+                                Years flew by like the pages of a favourite book — fast, colourful, and full of
+                                little surprises. Every school morning, every silly moment, every lesson learned
+                                quietly shaped the incredible person she was becoming. She was always a little
+                                more curious, a little more bright, and a whole lot more cute than she ever gave
+                                herself credit for.
+                            </p>
+                            <div class="img-placeholder reveal reveal-delay-1" style="height: 260px; margin-top: 1.5rem;">
+                                <span class="ph-icon">📚</span>
+                                <span>School days photo goes here</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 3 -->
+                    <div class="t-item reveal">
+                        <div class="glass-card t-card">
+                            <div class="t-date">🌸 Growing Into Herself</div>
+                            <h3 class="t-title">Becoming Vaishnavi</h3>
+                            <p class="t-body">
+                                There comes a moment in every girl's life where she stops just growing — and
+                                starts blooming. That's exactly what happened. She found her voice, her laugh,
+                                her weird little habits that I would later find absolutely endearing. She was
+                                figuring herself out, and she was doing it beautifully.
+                            </p>
+                            <div class="img-placeholder reveal reveal-delay-1" style="height: 260px; margin-top: 1.5rem;">
+                                <span class="ph-icon">🌺</span>
+                                <span>Growing up photo goes here</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="section-divider"><hr>🌸<hr></div>
+
+        <!-- ═══════════════════════════════
+             CHAPTER 2 — WHO IS SHE?
+        ════════════════════════════════ -->
+        <section class="content-section" id="who-is-she">
+            <div class="section-container">
+
+                <div class="section-header reveal">
+                    <div class="section-chip">Chapter 2</div>
+                    <h2 class="section-title">Who is Vaishnavi?</h2>
+                    <p class="section-sub">The little things that make her everything 💖</p>
+                </div>
+
+                <div class="traits-grid">
+
+                    <div class="glass-card trait-card reveal">
+                        <div class="trait-emoji">😊</div>
+                        <h3>Her Smile</h3>
+                        <p>My personal favourite thing in the entire universe. It hits differently every single time. One smile and whatever bad day I was having? Gone. Absolutely gone.</p>
+                    </div>
+
+                    <div class="glass-card trait-card reveal reveal-delay-1">
+                        <div class="trait-emoji">🤪</div>
+                        <h3>Her Personality</h3>
+                        <p>Equal parts silly, surprisingly deep, and dangerously cute. Every conversation with her feels like an adventure I never want to end.</p>
+                    </div>
+
+                    <div class="glass-card trait-card reveal reveal-delay-2">
+                        <div class="trait-emoji">✨</div>
+                        <h3>Her Dreams</h3>
+                        <p>She has big, brilliant, beautiful goals. And even on the days she doubts herself, I can see exactly how far she's going to go. She's going to conquer everything.</p>
+                    </div>
+
+                    <div class="glass-card trait-card reveal">
+                        <div class="trait-emoji">💪</div>
+                        <h3>Her Strength</h3>
+                        <p>She is so much stronger than she thinks. She handles things quietly, gracefully — and it amazes me every single day. She inspires me more than she knows.</p>
+                    </div>
+
+                    <div class="glass-card trait-card reveal reveal-delay-1">
+                        <div class="trait-emoji">🌸</div>
+                        <h3>Her Kindness</h3>
+                        <p>She has the softest, most generous heart. The way she cares for the people she loves — genuinely, deeply — makes the world a better place just by existing.</p>
+                    </div>
+
+                    <div class="glass-card trait-card reveal reveal-delay-2">
+                        <div class="trait-emoji">🌙</div>
+                        <h3>Her Vibe</h3>
+                        <p>There's a warmth to her that's hard to describe. Being around her just feels like home — safe, comfortable, and like everything is going to be absolutely fine.</p>
+                    </div>
+
+                </div>
+
+                <div class="img-placeholder reveal" style="max-width: 440px; height: 320px; margin: 0 auto;">
+                    <span class="ph-icon">💫</span>
+                    <span>Her photo — the one that captures her perfectly</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════
+             BRIDGE / TRANSITION
+        ════════════════════════════════ -->
+        <section class="bridge-section">
+            <div class="bridge-card reveal">
+                <h2>The Chapter I Never Expected 📖</h2>
+                <p>
+                    Among billions of people living billions of separate lives — there was one story I
+                    never planned to be a part of. But then she happened. And now I can't imagine any
+                    version of my story that doesn't have her in it.
+                    <br><br>
+                    She is the chapter I didn't see coming — and the only one I want to read forever.
+                </p>
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="section-divider"><hr>📸<hr></div>
+
+        <!-- ═══════════════════════════════
+             CHAPTER 3 — OUR MEMORIES
+        ════════════════════════════════ -->
+        <section class="content-section" id="our-memories">
+            <div class="section-container">
+
+                <div class="section-header reveal">
+                    <div class="section-chip">Chapter 3</div>
+                    <h2 class="section-title">Our Memories</h2>
+                    <p class="section-sub">Moments frozen in time forever 📸</p>
+                </div>
+
+                <div class="gallery-grid">
+
+                    <div class="gallery-card reveal">
+                        <div class="img-placeholder" style="height: 300px;">
+                            <span class="ph-icon">🌅</span>
+                            <span>Memory 1</span>
+                        </div>
+                        <div class="gallery-caption">💫 Where it all began</div>
+                    </div>
+
+                    <div class="gallery-card reveal reveal-delay-1">
+                        <div class="img-placeholder" style="height: 240px;">
+                            <span class="ph-icon">🍕</span>
+                            <span>Memory 2</span>
+                        </div>
+                        <div class="gallery-caption">🥰 A day to remember</div>
+                    </div>
+
+                    <div class="gallery-card reveal reveal-delay-2">
+                        <div class="img-placeholder" style="height: 360px;">
+                            <span class="ph-icon">🌧️</span>
+                            <span>Memory 3</span>
+                        </div>
+                        <div class="gallery-caption">😂 When we laughed too hard</div>
+                    </div>
+
+                    <div class="gallery-card reveal reveal-delay-1">
+                        <div class="img-placeholder" style="height: 280px;">
+                            <span class="ph-icon">🌃</span>
+                            <span>Memory 4</span>
+                        </div>
+                        <div class="gallery-caption">🌙 Midnight conversations</div>
+                    </div>
+
+                    <div class="gallery-card reveal reveal-delay-2">
+                        <div class="img-placeholder" style="height: 220px;">
+                            <span class="ph-icon">☕</span>
+                            <span>Memory 5</span>
+                        </div>
+                        <div class="gallery-caption">☕ Just the two of us</div>
+                    </div>
+
+                    <div class="gallery-card reveal reveal-delay-3">
+                        <div class="img-placeholder" style="height: 320px;">
+                            <span class="ph-icon">🎉</span>
+                            <span>Memory 6</span>
+                        </div>
+                        <div class="gallery-caption">🎊 The best day ever</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="section-divider"><hr>⏳<hr></div>
+
+        <!-- ═══════════════════════════════
+             OUR TIME — LIFE COUNTER
+        ════════════════════════════════ -->
+        <section class="counter-section" id="our-time">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <div class="section-chip">Our Time</div>
+                    <h2 class="section-title">She Has Been Making the World Better For...</h2>
+                    <p class="section-sub">Every second counts ⏳</p>
+                </div>
+
+                <div class="glass-card counter-wrap reveal">
+                    <div class="counter-label">
+                        ✨ Time since August 5, 2007 — counting live, every second ✨
+                    </div>
+                    <div class="counter-grid">
+                        <div class="counter-pill">
+                            <span id="count-years" class="c-val">0</span>
+                            <span class="c-lbl">Years</span>
+                        </div>
+                        <div class="counter-pill">
+                            <span id="count-months" class="c-val">0</span>
+                            <span class="c-lbl">Months</span>
+                        </div>
+                        <div class="counter-pill">
+                            <span id="count-days" class="c-val">0</span>
+                            <span class="c-lbl">Days</span>
+                        </div>
+                        <div class="counter-pill">
+                            <span id="count-hours" class="c-val">0</span>
+                            <span class="c-lbl">Hours</span>
+                        </div>
+                        <div class="counter-pill">
+                            <span id="count-minutes" class="c-val">0</span>
+                            <span class="c-lbl">Minutes</span>
+                        </div>
+                        <div class="counter-pill highlight">
+                            <span id="count-seconds" class="c-val">0</span>
+                            <span class="c-lbl">Seconds</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Timeline Item 2 -->
-                <div class="timeline-item scroll-reveal">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date font-lora">Growing Up</span>
-                        <h3 class="font-playfair">Discovering the World</h3>
-                        <p class="font-lora">Years flew by, turning curiosity into wisdom. Every school day, every challenge she faced, and every small victory shaped her. She grew up step by step, writing the early chapters of her life in the quietest, most beautiful ways.</p>
-                        <div class="image-placeholder landscape-img mt-4">
-                            <span>[ SCHOOL YEARS PHOTO PLACEHOLDER ]</span>
-                        </div>
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="section-divider"><hr>💌<hr></div>
+
+        <!-- ═══════════════════════════════
+             LOVE LETTER
+        ════════════════════════════════ -->
+        <section class="letter-section" id="love-letter">
+            <div class="section-container">
+                <div class="section-header reveal">
+                    <div class="section-chip">A Secret Note</div>
+                    <h2 class="section-title">Just For You 💌</h2>
+                    <p class="section-sub">Write from the heart — only she needs to read this</p>
+                </div>
+
+                <div class="letter-paper reveal">
+                    <div
+                        class="letter-body"
+                        contenteditable="true"
+                        id="love-letter-content"
+                        aria-label="Love letter editor">
                     </div>
                 </div>
+
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- TRAITS: WHO IS SHE -->
-    <section class="traits-section content-section bg-darker">
-        <div class="section-container">
-            <div class="text-center mb-16 scroll-reveal">
-                <h2 class="section-title font-playfair">Who is Vaishnavi?</h2>
-                <p class="section-subtitle font-lora italic">The little things that make her everything</p>
+        <!-- ═══════════════════════════════
+             FOOTER
+        ════════════════════════════════ -->
+        <section class="footer-section">
+            <div class="section-container">
+
+                <div class="img-placeholder reveal" style="max-width: 620px; height: 380px; margin: 0 auto 4rem; border-radius: 30px;">
+                    <span class="ph-icon">💑</span>
+                    <span>The best photo of us — for the grand finale ✨</span>
+                </div>
+
+                <h2 class="footer-tagline reveal">To All Our Future Chapters 🚀</h2>
+                <p class="footer-note reveal">
+                    Some stories are bookmarked. Some are gifted. And some are lived —
+                    slowly, sweetly, and with the kind of love you don't need to shout about. 💕
+                </p>
+
+                <button
+                    class="btn-begin reveal"
+                    id="begin-again-btn"
+                    onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    ⬆️ Read From The Beginning
+                </button>
+
+                <div class="footer-hearts reveal">
+                    <span>💕</span>
+                    <span>🌸</span>
+                    <span>💖</span>
+                    <span>🌸</span>
+                    <span>💕</span>
+                </div>
+
             </div>
+        </section>
 
-            <div class="traits-grid">
-                <!-- Trait 1 -->
-                <div class="trait-card scroll-reveal">
-                    <h3 class="font-playfair text-rose-glow">Her Smile</h3>
-                    <p class="font-lora">Honestly? It’s my favorite thing in the world. The way her eyes crinkle and the whole room just lights up—it immediately cures whatever bad day I'm having.</p>
-                </div>
-                <!-- Trait 2 -->
-                <div class="trait-card scroll-reveal delay-1">
-                    <h3 class="font-playfair text-rose-glow">Her Personality</h3>
-                    <p class="font-lora">She’s this beautiful mix of silly, cute, and incredibly smart. One second she’s laughing at the most random things, and the next she’s saying something so deep and thoughtful that I just stop and stare in awe.</p>
-                </div>
-                <!-- Trait 3 -->
-                <div class="trait-card scroll-reveal delay-2">
-                    <h3 class="font-playfair text-rose-glow">Her Dreams</h3>
-                    <p class="font-lora">She has these big, beautiful goals, and I absolutely love listening to her talk about them. Even when she doubts herself, I look at her and just know she’s going to conquer the world.</p>
-                </div>
-                <!-- Trait 4 -->
-                <div class="trait-card scroll-reveal">
-                    <h3 class="font-playfair text-rose-glow">Her Strength</h3>
-                    <p class="font-lora">She is so much tougher than she gives herself credit for. No matter what life throws her way, she handles it with so much grace and keeps moving forward. She inspires me every single day.</p>
-                </div>
-                <!-- Trait 5 -->
-                <div class="trait-card scroll-reveal delay-1">
-                    <h3 class="font-playfair text-rose-glow">Her Kindness</h3>
-                    <p class="font-lora">She has the softest heart. The way she cares for people, listens when they need it, and spreads warmth everywhere she goes... she just makes the world a much better place to be in.</p>
-                </div>
-            </div>
-
-            <div class="image-placeholder portrait-img mt-12 mx-auto scroll-reveal">
-                <span>[ PERSONALITY SECTION IMAGE PLACEHOLDER ]</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- TRANSITION: OUR STORY -->
-    <section class="transition-section flex-center text-center">
-        <div class="section-container scroll-reveal">
-            <h2 class="font-playfair text-3xl md-text-4xl text-rose-glow">The Chapter I Never Expected</h2>
-            <div class="divider"></div>
-            <p class="font-lora text-lg italic mt-8">
-                Among billions of life paths crossing silently every day, there was one story I never expected to become a part of mine. 
-                <br><br>
-                Her story. Vaishnavi.
-                <br><br>
-                It was the chapter I didn't see coming, but it became the only one I want to read forever.
-            </p>
-        </div>
-    </section>
-
-    <!-- MEMORY GALLERY -->
-    <section class="gallery-section content-section">
-        <div class="section-container">
-            <div class="text-center mb-16 scroll-reveal">
-                <h2 class="section-title font-playfair">Our Memories</h2>
-                <p class="section-subtitle font-lora italic">Moments frozen in time</p>
-            </div>
-
-            <div class="masonry-gallery">
-                <div class="gallery-item scroll-reveal">
-                    <div class="image-placeholder gallery-img-tall"><span>[ FIRST MEMORY PLACEHOLDER ]</span></div>
-                    <div class="gallery-caption font-lora">Where it all began</div>
-                </div>
-                <div class="gallery-item scroll-reveal delay-1">
-                    <div class="image-placeholder gallery-img-square"><span>[ MEMORY 2 PLACEHOLDER ]</span></div>
-                    <div class="gallery-caption font-lora">A day to remember</div>
-                </div>
-                <div class="gallery-item scroll-reveal delay-2">
-                    <div class="image-placeholder gallery-img-wide"><span>[ MEMORY 3 PLACEHOLDER ]</span></div>
-                    <div class="gallery-caption font-lora">Laughter in the rain</div>
-                </div>
-                <div class="gallery-item scroll-reveal">
-                    <div class="image-placeholder gallery-img-square"><span>[ MEMORY 4 PLACEHOLDER ]</span></div>
-                    <div class="gallery-caption font-lora">Midnight conversations</div>
-                </div>
-                <div class="gallery-item scroll-reveal delay-1">
-                    <div class="image-placeholder gallery-img-tall"><span>[ MEMORY 5 PLACEHOLDER ]</span></div>
-                    <div class="gallery-caption font-lora">A beautiful surprise</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TIME TOGETHER (COUNTER) -->
-    <section class="time-section content-section bg-darker">
-        <div class="section-container text-center scroll-reveal">
-            <h2 class="section-title font-playfair">The Journey So Far</h2>
-            <p class="section-subtitle font-lora italic">Every second counts</p>
-
-            <div class="counter-box mt-12">
-                <p class="font-lora text-xs uppercase tracking-widest text-rose-glow mb-8">Time experienced since August 5, 2007</p>
-                <div class="counter-grid">
-                    <div class="counter-item">
-                        <span id="count-years" class="counter-val font-playfair">0</span>
-                        <span class="counter-lbl font-lora">Years</span>
-                    </div>
-                    <div class="counter-item">
-                        <span id="count-days" class="counter-val font-playfair">0</span>
-                        <span class="counter-lbl font-lora">Days</span>
-                    </div>
-                    <div class="counter-item">
-                        <span id="count-hours" class="counter-val font-playfair">0</span>
-                        <span class="counter-lbl font-lora">Hours</span>
-                    </div>
-                    <div class="counter-item">
-                        <span id="count-minutes" class="counter-val font-playfair">0</span>
-                        <span class="counter-lbl font-lora">Minutes</span>
-                    </div>
-                    <div class="counter-item">
-                        <span id="count-seconds" class="counter-val font-playfair">0</span>
-                        <span class="counter-lbl font-lora">Seconds</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- LOVE LETTER -->
-    <section class="letter-section content-section">
-        <div class="section-container scroll-reveal">
-            <div class="text-center mb-12">
-                <h2 class="section-title font-playfair">A Note for You</h2>
-            </div>
-            
-            <div class="letter-paper">
-                <div class="letter-content font-lora italic" contenteditable="true">
-                    "My dearest Vaishnavi,<br><br>
-                    This is a space just for you. Type your beautiful, personal message right here... Let her know how much she means to you, how much you cherish her, and everything you feel in your heart.<br><br>
-                    Forever yours,"
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FUTURE & FOOTER -->
-    <section class="footer-section content-section text-center">
-        <div class="section-container scroll-reveal">
-            <h2 class="font-playfair text-3xl text-rose-glow mb-6">To Our Future Chapters</h2>
-            
-            <div class="image-placeholder landscape-img mx-auto mb-12">
-                <span>[ FINAL COUPLE PHOTO PLACEHOLDER ]</span>
-            </div>
-
-            <div class="ending-statement font-lora italic text-lg mb-12">
-                <p>Some stories are remembered.</p>
-                <p class="text-burgundy">Some stories are cherished.</p>
-                <p>And some stories... become a part of us forever.</p>
-            </div>
-
-            <button class="begin-again-btn font-lora uppercase tracking-widest text-xs" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                Begin Again
-            </button>
-        </div>
-    </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
