@@ -19,7 +19,7 @@ function initCanvas() {
             x: Math.random() * width,
             y: Math.random() * height,
             radius: Math.random() * 1.5 + 0.5,
-            speed: Math.random() * 0.2 + 0.05,
+            speed: Math.random() * 0.15 + 0.05,
             opacity: Math.random()
         });
     }
@@ -51,26 +51,52 @@ window.addEventListener('resize', initCanvas);
 initCanvas();
 animateStars();
 
-// Intersection Observer for Scroll Animations
-const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.15
-};
 
-const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-        if(entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            // Optional: stop observing once visible if you want it to only animate once
-            // observer.unobserve(entry.target);
+// Digital Storybook Navigation
+let currentPage = 1;
+const totalPages = 8;
+
+const pages = document.querySelectorAll('.book-page');
+const prevBtn = document.getElementById('prev-page-btn');
+const nextBtn = document.getElementById('next-page-btn');
+const pageIndicator = document.getElementById('page-indicator');
+const restartBtn = document.getElementById('restart-book-btn');
+
+function updateBook() {
+    pages.forEach(page => {
+        page.classList.remove('active');
+        if (parseInt(page.getAttribute('data-page')) === currentPage) {
+            page.classList.add('active');
         }
     });
-}, observerOptions);
 
-document.querySelectorAll('.scroll-reveal').forEach(el => {
-    observer.observe(el);
+    // Update Ribbon State
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
+
+    // Update Footer Indicator
+    pageIndicator.textContent = `Page ${currentPage} / ${totalPages}`;
+}
+
+prevBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        updateBook();
+    }
 });
+
+nextBtn.addEventListener('click', () => {
+    if (currentPage < totalPages) {
+        currentPage++;
+        updateBook();
+    }
+});
+
+restartBtn.addEventListener('click', () => {
+    currentPage = 1;
+    updateBook();
+});
+
 
 // Memory Galaxy Interaction
 const memoryStars = document.querySelectorAll('.memory-star');
@@ -112,13 +138,11 @@ modal.addEventListener('click', (e) => {
     }
 });
 
+
 // Life Counter Logic
 function updateLifeCounter() {
-    // Target date: August 5, 2007
     const birthDate = new Date('2007-08-05T00:00:00');
     const now = new Date();
-    
-    // Total milliseconds elapsed
     const diffMs = now - birthDate;
     
     // Calculate full years accurately considering leap years
@@ -127,20 +151,18 @@ function updateLifeCounter() {
     
     // Total days
     const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
     // Total hours
     const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
-    
     // Total minutes
     const totalMinutes = Math.floor(diffMs / (1000 * 60));
     
-    // Update DOM (Add commas for readability)
+    // Update DOM
     document.getElementById('count-years').textContent = years;
     document.getElementById('count-days').textContent = totalDays.toLocaleString();
     document.getElementById('count-hours').textContent = totalHours.toLocaleString();
     document.getElementById('count-minutes').textContent = totalMinutes.toLocaleString();
 }
 
-// Initial call and interval
 updateLifeCounter();
-setInterval(updateLifeCounter, 60000); // Update every minute to keep minutes accurate
+setInterval(updateLifeCounter, 60000);
+updateBook(); // Initialize page state
