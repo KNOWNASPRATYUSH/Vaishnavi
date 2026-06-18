@@ -188,9 +188,8 @@ function renderLeftPhotoPanel() {
     return `
       <div class="page-photo-panel">
         <div class="book-photo-wrap">
-          <div class="img-placeholder book-hero-photo" id="book-hero-photo">
-            <span class="ph-icon">🌸</span>
-            <span class="ph-label">Her Photo</span>
+          <div class="book-hero-photo" id="book-hero-photo">
+            <img src="images/img3.jpg" alt="Vaishnavi" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
           </div>
           <div class="book-photo-caption">Vaishnavi 🌸</div>
         </div>
