@@ -46,6 +46,12 @@
          ║  MAIN BENTO DASHBOARD CONTAINER      ║
          ╚══════════════════════════════════════╝ -->
     <div id="main-dashboard" class="dashboard-wrap hidden">
+        
+        <!-- Birthday Badge (Hidden by default, shown only on Aug 5) -->
+        <div id="birthday-badge" class="birthday-badge hidden">
+            <span class="badge-icon">🎂</span>
+            Today's the birthday of this precious girl!
+        </div>
         <header class="db-header">
             <h1 class="db-title">Vaishnavi's Universe 🌸</h1>
             <p class="db-subtitle">Every little thing that makes her special, captured in one interactive space.</p>
@@ -209,6 +215,24 @@
     <!-- ╔══════════════════════════════════════╗
          ║  OVERLAY MODALS                      ║
          ╚══════════════════════════════════════╝ -->
+
+    <!-- BIRTHDAY MODAL (Shown once per year on Aug 5) -->
+    <div class="modal-overlay hidden" id="modal-birthday">
+        <button class="btn-close" aria-label="Close Birthday Modal">&times;</button>
+        <div class="birthday-modal-content glass-card">
+            <div class="bday-decorations">
+                <span>🎊</span><span>🎈</span><span>🎂</span><span>🎈</span><span>🎊</span>
+            </div>
+            <h1 class="bday-title">Happy Birthday, Vaishnavi!</h1>
+            <p class="bday-message">
+                Today is August 5th — the day the world got significantly brighter and cuter because you were born into it!
+                <br><br>
+                I am so incredibly lucky to know you. Keep shining, keep smiling, and keep being the amazing person you are. 
+                I hope this year brings you everything your beautiful heart desires.
+            </p>
+            <button class="btn-bday-close" id="btn-bday-close">Thank you! ✨</button>
+        </div>
+    </div>
 
     <!-- MODAL 1: WHO SHE IS — TWO-PAGE SPREAD BOOKLET -->
     <div class="modal-overlay hidden" id="modal-who">

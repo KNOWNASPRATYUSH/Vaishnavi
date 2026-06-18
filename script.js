@@ -56,8 +56,34 @@ if (btnUnlock && introCurtain && mainDashboard) {
         setTimeout(() => {
             introCurtain.classList.add('hidden');
             mainDashboard.classList.remove('hidden');
-            // Trigger bento cards entry animations if any
+            // Check if it's her birthday today
+            checkBirthday();
         }, 800);
+    });
+}
+
+function checkBirthday() {
+    const today = new Date();
+    // August is month 7 in JS Date (0-indexed), Date is 5
+    if (today.getMonth() === 7 && today.getDate() === 5) {
+        const badge = document.getElementById('birthday-badge');
+        if (badge) badge.classList.remove('hidden');
+
+        const currentYear = today.getFullYear().toString();
+        const lastSeenYear = localStorage.getItem('birthdaySeenYear');
+
+        if (lastSeenYear !== currentYear) {
+            // First time accessing today
+            openModal('modal-birthday');
+            localStorage.setItem('birthdaySeenYear', currentYear);
+        }
+    }
+}
+
+const btnBdayClose = document.getElementById('btn-bday-close');
+if (btnBdayClose) {
+    btnBdayClose.addEventListener('click', () => {
+        closeModal('modal-birthday');
     });
 }
 

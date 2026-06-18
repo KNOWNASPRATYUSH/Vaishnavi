@@ -1793,6 +1793,99 @@ body::before {
     100% { transform: translateY(-80px) scale(1.1) rotate(12deg); opacity: 0; }
 }
 
+/* ── BIRTHDAY BADGE & MODAL ── */
+.birthday-badge {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+    background: var(--grad-candy);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-pill);
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 6px 20px rgba(255, 77, 166, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: floatBadge 3s ease-in-out infinite;
+}
+
+@keyframes floatBadge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.badge-icon {
+    font-size: 1.2rem;
+}
+
+.birthday-modal-content {
+    max-width: 500px;
+    width: 100%;
+    background: #fffdfc;
+    padding: 3rem 2rem;
+    text-align: center;
+    border: 2px solid rgba(255, 77, 166, 0.2);
+}
+
+.bday-decorations {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.bday-decorations span {
+    animation: bouncePop 2s ease-in-out infinite;
+}
+.bday-decorations span:nth-child(even) {
+    animation-delay: 0.2s;
+}
+
+@keyframes bouncePop {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-10px) scale(1.1); }
+}
+
+.bday-title {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.2rem;
+    color: var(--pink);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.bday-message {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.05rem;
+    color: var(--text-dark);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.btn-bday-close {
+    background: var(--grad-candy);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: var(--radius-pill);
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(255, 77, 166, 0.25);
+}
+
+.btn-bday-close:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 77, 166, 0.4);
+}
+
 /* ─────────────────────────────────────────────
    RESPONSIVE DESIGN
    ───────────────────────────────────────────── */
