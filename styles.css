@@ -1840,29 +1840,10 @@ body::before {
         min-height: auto;
     }
 
-    /* Booklet Mobile View: Stack pages rather than side-by-side */
+    /* Booklet Mobile View */
     .book-container {
         max-width: 420px;
         height: 480px;
-    }
-
-    .book {
-        height: 400px;
-    }
-
-    .book-page {
-        width: 100%;
-        left: 0;
-        transform-origin: left center;
-    }
-
-    .book::after {
-        display: none;
-    }
-
-    .page-content {
-        border-radius: 16px !important;
-        padding: 1.5rem;
     }
     
     .film-card {
