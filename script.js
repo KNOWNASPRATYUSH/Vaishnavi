@@ -939,7 +939,16 @@ async function sendChatMessage(overrideText = null, imageBase64 = null) {
         if (typeof emailjs !== 'undefined') {
             emailjs.send("service_2jq4x1f", "template_6b9y4vm", {
                 message: `New secret message from ${sender}: "${text}"`
-            }).catch(err => console.warn('EmailJS error:', err));
+            }).then(
+                function(res) {
+                    // Success! Let the user know
+                    alert("Debug: EmailJS successfully sent the email to Google's servers. If it's not in your inbox, it is 100% in your Spam folder or blocked by Gmail.");
+                },
+                function(err) {
+                    // Failure! Show the exact error
+                    alert("Debug: EmailJS Failed to send! Error: " + JSON.stringify(err));
+                }
+            );
         }
     } catch (e) {
         console.error('Failed to send msg', e);
