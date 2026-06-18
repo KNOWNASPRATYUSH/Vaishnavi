@@ -202,140 +202,38 @@
          ║  OVERLAY MODALS                      ║
          ╚══════════════════════════════════════╝ -->
 
-    <!-- MODAL 1: WHO SHE IS BOOKLET -->
+    <!-- MODAL 1: WHO SHE IS — TWO-PAGE SPREAD BOOKLET -->
     <div class="modal-overlay hidden" id="modal-who">
         <button class="btn-close" aria-label="Close Book">&times;</button>
         <div class="book-container">
-            <div class="book" id="flip-book">
-                
-                <!-- COVER PAGE (Page 1) -->
-                <div class="book-page first-page" style="z-index: 10;">
-                    <div class="page-content book-cover">
-                        <div class="cover-design">
-                            <span class="cover-emoji">🎀</span>
-                            <h2>Who She Is</h2>
-                            <p>A folder of wonderful traits & memories</p>
-                            <span class="flip-hint">Click next to open booklet →</span>
-                        </div>
-                    </div>
+
+            <!-- Two-page spread wrapper -->
+            <div class="book-spread-wrapper" id="book-spread-wrapper">
+                <!-- LEFT PAGE PANEL -->
+                <div class="book-panel book-panel-left" id="book-left-panel">
+                    <div class="page-inner" id="left-page-inner"></div>
+                    <span class="page-num-label left-label" id="left-page-num"></span>
                 </div>
 
-                <!-- PAGE 2: BIRTHDAY -->
-                <div class="book-page" style="z-index: 9;">
-                    <div class="page-content">
-                        <span class="page-num">01</span>
-                        <div class="sticky pink">
-                            <span class="sticky-icon">🎂</span>
-                            <h3>August 5, 2007</h3>
-                            <p>She came into this world on August 5, 2007. The world got significantly cuter that day and nobody even announced it.</p>
-                        </div>
-                    </div>
+                <!-- SPINE -->
+                <div class="book-spine-bar"></div>
+
+                <!-- RIGHT PAGE PANEL -->
+                <div class="book-panel book-panel-right" id="book-right-panel">
+                    <div class="page-inner" id="right-page-inner"></div>
+                    <span class="page-num-label right-label" id="right-page-num"></span>
                 </div>
 
-                <!-- PAGE 3: SMILE -->
-                <div class="book-page" style="z-index: 8;">
-                    <div class="page-content">
-                        <span class="page-num">02</span>
-                        <div class="sticky lavender">
-                            <span class="sticky-icon">😊</span>
-                            <h3>Her Smile</h3>
-                            <p>Her smile is honestly unfair. Like it should be regulated. One second you're fine, then she smiles and suddenly nothing else matters.</p>
-                        </div>
-                    </div>
+                <!-- 3D PAGE FLIPPER OVERLAY (shown only during turn animation) -->
+                <div class="page-flipper" id="page-flipper">
+                    <div class="flipper-face flipper-front" id="flipper-front"></div>
+                    <div class="flipper-face flipper-back" id="flipper-back"></div>
                 </div>
-
-                <!-- PAGE 4: SILLY & SMART -->
-                <div class="book-page" style="z-index: 7;">
-                    <div class="page-content">
-                        <span class="page-num">03</span>
-                        <div class="sticky peach">
-                            <span class="sticky-icon">🤪</span>
-                            <h3>Silly & Smart</h3>
-                            <p>She is a dangerous mix of silly and smart. You'll be laughing with her and then realise she just said something actually really deep.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PAGE 5: QUIET STRENGTH -->
-                <div class="book-page" style="z-index: 6;">
-                    <div class="page-content">
-                        <span class="page-num">04</span>
-                        <div class="sticky pink">
-                            <span class="sticky-icon">💪</span>
-                            <h3>Quiet Strength</h3>
-                            <p>She handles things quietly. No drama, no breakdown — she just figures it out. And it amazes me every single time.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PAGE 6: HOME -->
-                <div class="book-page" style="z-index: 5;">
-                    <div class="page-content">
-                        <span class="page-num">05</span>
-                        <div class="sticky lavender">
-                            <span class="sticky-icon">🌙</span>
-                            <h3>Feels Like Home</h3>
-                            <p>Being around her just feels like home. Safe. Warm. Like everything is going to be absolutely fine.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PAGE 7: DREAMS -->
-                <div class="book-page" style="z-index: 4;">
-                    <div class="page-content">
-                        <span class="page-num">06</span>
-                        <div class="sticky peach">
-                            <span class="sticky-icon">✨</span>
-                            <h3>Big Dreams</h3>
-                            <p>She has big, brilliant dreams. On the days she doubts herself the most — those are the days I'm most certain she's going to conquer everything.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PAGE 8: HEART -->
-                <div class="book-page" style="z-index: 3;">
-                    <div class="page-content">
-                        <span class="page-num">07</span>
-                        <div class="sticky pink">
-                            <span class="sticky-icon">🌸</span>
-                            <h3>Soft Heart</h3>
-                            <p>She has the softest heart. The way she cares for people — genuinely, deeply — makes the world a better place just by her existing in it.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PAGE 9: RARE -->
-                <div class="book-page" style="z-index: 2;">
-                    <div class="page-content">
-                        <span class="page-num">08</span>
-                        <div class="sticky lavender">
-                            <span class="sticky-icon">🎀</span>
-                            <h3>Uniquely Vaishnavi</h3>
-                            <p>She doesn't even know how rare she is. That's the most Vaishnavi thing about her.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BACK COVER / PHOTOS (Page 10) -->
-                <div class="book-page last-page" style="z-index: 1;">
-                    <div class="page-content book-back">
-                        <h3>Our Photos</h3>
-                        <div class="book-photo-row">
-                            <div class="img-placeholder" style="height:120px; border-radius:12px; flex:1; min-width:80px;">
-                                <span class="ph-icon">📸</span>
-                            </div>
-                            <div class="img-placeholder" style="height:120px; border-radius:12px; flex:1; min-width:80px;">
-                                <span class="ph-icon">📸</span>
-                            </div>
-                        </div>
-                        <p class="back-text">To be continued... 🌸</p>
-                    </div>
-                </div>
-
             </div>
-            
+
             <div class="book-controls">
                 <button class="btn-page" id="btn-page-prev">← Previous</button>
+                <div class="book-progress-dots" id="book-dots"></div>
                 <button class="btn-page" id="btn-page-next">Next →</button>
             </div>
         </div>

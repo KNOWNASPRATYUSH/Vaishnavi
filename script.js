@@ -113,7 +113,10 @@ function closeModal(modalEl) {
 
 // Attach widget click triggers
 if (widgetWho && modalWho) {
-    widgetWho.addEventListener('click', () => openModal(modalWho));
+    widgetWho.addEventListener('click', () => {
+        openModal(modalWho);
+        initBook();
+    });
 }
 if (widgetJourney && modalJourney) {
     widgetJourney.addEventListener('click', () => {
@@ -160,35 +163,188 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
 
 
 // ─────────────────────────────────────────────────────────────────
-// 4. BOOKLET PAGE FLIP SYSTEM
+// 4. TWO-PAGE BOOK SPREAD — 3D PAGE FLIP SYSTEM
 // ─────────────────────────────────────────────────────────────────
-const pages = Array.from(document.querySelectorAll('.book-page'));
+
+const BOOK_PAGES = [
+    { type: 'cover',   emoji: '🎀', title: 'Who She Is',        subtitle: 'A folder of wonderful traits & memories' },
+    { type: 'note', color: 'pink',     emoji: '🎂', title: 'August 5, 2007',     text: 'She came into this world on August 5, 2007. The world got significantly cuter that day and nobody even announced it.' },
+    { type: 'note', color: 'lavender', emoji: '😊', title: 'Her Smile',          text: "Her smile is honestly unfair. Like it should be regulated. One second you're fine, then she smiles and suddenly nothing else matters." },
+    { type: 'note', color: 'peach',    emoji: '🤪', title: 'Silly & Smart',      text: "She is a dangerous mix of silly and smart. You'll be laughing with her and then realise she just said something actually really deep." },
+    { type: 'note', color: 'pink',     emoji: '💪', title: 'Quiet Strength',     text: "She handles things quietly. No drama, no breakdown — she just figures it out. And it amazes me every single time." },
+    { type: 'note', color: 'lavender', emoji: '🌙', title: 'Feels Like Home',    text: "Being around her just feels like home. Safe. Warm. Like everything is going to be absolutely fine." },
+    { type: 'note', color: 'peach',    emoji: '✨', title: 'Big Dreams',         text: "She has big, brilliant dreams. On the days she doubts herself — those are the days I'm most certain she'll conquer everything." },
+    { type: 'note', color: 'pink',     emoji: '🌸', title: 'Soft Heart',         text: "She has the softest heart. The way she cares for people — genuinely, deeply — makes the world a better place just by her existing in it." },
+    { type: 'note', color: 'lavender', emoji: '🎀', title: 'Uniquely Vaishnavi', text: "She doesn't even know how rare she is. That's the most Vaishnavi thing about her." },
+    { type: 'back',    emoji: '💕', title: 'To be continued...', text: 'Every page of her story is better than the last.' },
+];
+
+let bookLeftIdx   = -1;   // -1 = blank left page
+let bookRightIdx  = 0;    // 0  = cover
+let bookAnimating = false;
+
+/** Build an HTML string for a single book page */
+function renderBookPage(idx) {
+    if (idx < 0) {
+        return `<div class="page-blank"><span class="page-blank-emoji">🌸</span></div>`;
+    }
+    const p = BOOK_PAGES[idx];
+    if (!p) return '';
+
+    if (p.type === 'cover') {
+        return `
+          <div class="page-cover">
+            <span class="page-cover-emoji">${p.emoji}</span>
+            <h2>${p.title}</h2>
+            <p>${p.subtitle}</p>
+            <span class="flip-hint">Click Next to open →</span>
+          </div>`;
+    }
+    if (p.type === 'back') {
+        return `
+          <div class="page-back-cover">
+            <span style="font-size:3rem">${p.emoji}</span>
+            <h3 style="font-family:'Pacifico',cursive;font-size:1.5rem;color:var(--text-dark)">${p.title}</h3>
+            <p style="font-size:0.9rem;color:var(--text-med);line-height:1.7;max-width:200px">${p.text}</p>
+          </div>`;
+    }
+    // Regular sticky note page
+    return `
+      <div class="book-sticky ${p.color}">
+        <span class="book-sticky-icon">${p.emoji}</span>
+        <h3>${p.title}</h3>
+        <p>${p.text}</p>
+      </div>`;
+}
+
+function updateBookPanels() {
+    const leftInner  = document.getElementById('left-page-inner');
+    const rightInner = document.getElementById('right-page-inner');
+    const leftNum    = document.getElementById('left-page-num');
+    const rightNum   = document.getElementById('right-page-num');
+
+    if (leftInner)  leftInner.innerHTML  = renderBookPage(bookLeftIdx);
+    if (rightInner) rightInner.innerHTML = renderBookPage(bookRightIdx);
+    if (leftNum)    leftNum.textContent  = bookLeftIdx > 0 ? `${bookLeftIdx}` : '';
+    if (rightNum)   rightNum.textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
+
+    updateBookUI();
+}
+
+function updateBookUI() {
+    const dotsEl  = document.getElementById('book-dots');
+    const prevBtn = document.getElementById('btn-page-prev');
+    const nextBtn = document.getElementById('btn-page-next');
+
+    const totalSpreads = Math.ceil((BOOK_PAGES.length + 1) / 2);
+    const currentSpread = bookRightIdx === 0 ? 0 : Math.floor((bookRightIdx + 1) / 2);
+
+    if (dotsEl) {
+        dotsEl.innerHTML = '';
+        for (let i = 0; i < totalSpreads; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'book-dot' + (i === currentSpread ? ' active' : '');
+            dotsEl.appendChild(dot);
+        }
+    }
+
+    if (prevBtn) prevBtn.disabled = bookLeftIdx < 0;
+    if (nextBtn) nextBtn.disabled = bookRightIdx >= BOOK_PAGES.length - 1;
+}
+
+function runFlip(forward) {
+    if (bookAnimating) return;
+    if (forward  && bookRightIdx >= BOOK_PAGES.length - 1) return;
+    if (!forward && bookLeftIdx < 0) return;
+
+    bookAnimating = true;
+
+    const flipper      = document.getElementById('page-flipper');
+    const flipperFront = document.getElementById('flipper-front');
+    const flipperBack  = document.getElementById('flipper-back');
+    const leftInner    = document.getElementById('left-page-inner');
+    const rightInner   = document.getElementById('right-page-inner');
+    if (!flipper || !flipperFront || !flipperBack) { bookAnimating = false; return; }
+
+    if (forward) {
+        // Flipper covers the RIGHT panel, rotates toward the left (spine)
+        flipper.style.left         = 'auto';
+        flipper.style.right        = '0';
+        flipper.style.width        = window.innerWidth <= 680 ? '100%' : '50%';
+        flipper.style.transformOrigin = 'left center';
+
+        // Front face = current right page content
+        flipperFront.style.borderRadius = window.innerWidth <= 680 ? '18px' : '0 18px 18px 0';
+        flipperFront.innerHTML = rightInner.innerHTML;
+
+        // Back face = what the right page looks like from the back (blank/warm gradient)
+        flipperBack.style.borderRadius  = window.innerWidth <= 680 ? '18px' : '18px 0 0 18px';
+        flipperBack.innerHTML = '';
+    } else {
+        // Flipper covers the LEFT panel, rotates toward the right
+        flipper.style.right        = 'auto';
+        flipper.style.left         = '0';
+        flipper.style.width        = window.innerWidth <= 680 ? '100%' : '50%';
+        flipper.style.transformOrigin = 'right center';
+
+        // Front face = current left page content
+        flipperFront.style.borderRadius = window.innerWidth <= 680 ? '18px' : '18px 0 0 18px';
+        flipperFront.innerHTML = leftInner.innerHTML;
+
+        // Back face blank
+        flipperBack.style.borderRadius  = window.innerWidth <= 680 ? '18px' : '0 18px 18px 0';
+        flipperBack.innerHTML = '';
+    }
+
+    // Show the flipper
+    flipper.style.transform  = 'rotateY(0deg)';
+    flipper.style.transition = 'none';
+    flipper.classList.add('is-flipping');
+
+    // Update the underlying panels at the midpoint (page is edge-on / invisible)
+    setTimeout(() => {
+        if (forward) {
+            bookLeftIdx  = bookRightIdx;
+            bookRightIdx = bookRightIdx + 1;
+        } else {
+            bookRightIdx = bookLeftIdx;
+            bookLeftIdx  = bookLeftIdx - 1;
+        }
+        leftInner.innerHTML  = renderBookPage(bookLeftIdx);
+        rightInner.innerHTML = renderBookPage(bookRightIdx);
+        document.getElementById('left-page-num').textContent  = bookLeftIdx > 0  ? `${bookLeftIdx}` : '';
+        document.getElementById('right-page-num').textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
+        updateBookUI();
+    }, 350);
+
+    // Kick off the CSS rotation
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            flipper.style.transition = 'transform 0.7s cubic-bezier(0.645, 0.045, 0.355, 1)';
+            flipper.style.transform  = forward ? 'rotateY(-180deg)' : 'rotateY(180deg)';
+        });
+    });
+
+    // After animation completes — hide flipper and reset
+    setTimeout(() => {
+        flipper.classList.remove('is-flipping');
+        flipper.style.transition = 'none';
+        flipper.style.transform  = 'rotateY(0deg)';
+        bookAnimating = false;
+    }, 780);
+}
+
+function initBook() {
+    bookLeftIdx  = -1;
+    bookRightIdx = 0;
+    bookAnimating = false;
+    updateBookPanels();
+}
+
 const btnPrevPage = document.getElementById('btn-page-prev');
 const btnNextPage = document.getElementById('btn-page-next');
-let currentPageIndex = 0; // index of the page that will flip next
-
-function flipNext() {
-    if (currentPageIndex < pages.length - 1) {
-        const page = pages[currentPageIndex];
-        page.classList.add('flipped');
-        page.style.zIndex = currentPageIndex + 1;
-        currentPageIndex++;
-    }
-}
-
-function flipPrev() {
-    if (currentPageIndex > 0) {
-        currentPageIndex--;
-        const page = pages[currentPageIndex];
-        page.classList.remove('flipped');
-        page.style.zIndex = pages.length - currentPageIndex;
-    }
-}
-
-if (btnNextPage && btnPrevPage) {
-    btnNextPage.addEventListener('click', flipNext);
-    btnPrevPage.addEventListener('click', flipPrev);
-}
+if (btnNextPage) btnNextPage.addEventListener('click', () => runFlip(true));
+if (btnPrevPage) btnPrevPage.addEventListener('click', () => runFlip(false));
 
 // ─────────────────────────────────────────────────────────────────
 // 5. WAX SEAL & ENVELOPE INTERACTION
@@ -484,9 +640,9 @@ document.addEventListener('keydown', e => {
     // Skip if typing in the letter
     if (document.activeElement === letterEl) return;
 
-    // Flip pages if who-she-is modal is open
+    // Flip book pages if the Who She Is modal is open
     if (modalWho && modalWho.classList.contains('visible')) {
-        if (e.key === 'ArrowRight') flipNext();
-        if (e.key === 'ArrowLeft') flipPrev();
+        if (e.key === 'ArrowRight') runFlip(true);
+        if (e.key === 'ArrowLeft')  runFlip(false);
     }
 });
