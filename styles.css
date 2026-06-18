@@ -1227,14 +1227,18 @@ body::before {
     transform: none;
 }
 
-/* Mobile — single page mode */
+/* Mobile — stacked mode */
 @media (max-width: 680px) {
     .book-spread-wrapper {
-        height: 380px;
+        height: auto;
+        flex-direction: column;
     }
 
     .book-panel-left {
-        display: none; /* Hide left panel; show single page on mobile */
+        display: block;
+        min-height: 280px;
+        border-radius: 18px 18px 0 0;
+        box-shadow: none;
     }
 
     .book-spine-bar {
@@ -1242,20 +1246,17 @@ body::before {
     }
 
     .book-panel-right {
-        border-radius: 18px;
+        min-height: 280px;
+        border-radius: 0 0 18px 18px;
+        box-shadow: none;
     }
 
     .page-cover {
-        border-radius: 18px;
+        border-radius: 0 0 18px 18px;
     }
 
     .page-flipper {
-        width: 100%;
-        transform-origin: left center;
-    }
-
-    .flipper-face {
-        border-radius: 18px;
+        display: none !important;
     }
 }
 

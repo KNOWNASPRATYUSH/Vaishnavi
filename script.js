@@ -277,6 +277,16 @@ function runFlip(forward) {
     const isMobile = window.innerWidth <= 680;
     const targetIdx = forward ? bookRightIdx + 1 : bookRightIdx - 1;
 
+    if (isMobile) {
+        bookRightIdx = targetIdx;
+        leftInner.innerHTML = renderLeftPhotoPanel(bookRightIdx);
+        rightInner.innerHTML = renderBookPage(bookRightIdx);
+        document.getElementById('right-page-num').textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
+        updateBookUI();
+        bookAnimating = false;
+        return;
+    }
+
     if (forward) {
         // Flipper covers RIGHT panel → rotates left (toward spine)
         flipper.style.left         = 'auto';
@@ -453,12 +463,12 @@ function previewPolaroid(polaroidEl) {
 
     if (img && img.src) {
         previewerImg.src = img.src;
-        previewerImg.classList.remove('hidden');
-        previewerPlaceholder.classList.add('hidden');
+        previewerImg.style.display = 'block';
+        previewerPlaceholder.style.display = 'none';
     } else {
         // Use placeholder content (emojis)
-        previewerImg.classList.add('hidden');
-        previewerPlaceholder.classList.remove('hidden');
+        previewerImg.style.display = 'none';
+        previewerPlaceholder.style.display = 'flex';
         const icon = placeholder ? placeholder.querySelector('.ph-icon').textContent : '📸';
         previewerPlaceholder.querySelector('.ph-icon').textContent = icon;
     }
