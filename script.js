@@ -775,7 +775,7 @@ if (widgetChat) {
     widgetChat.addEventListener('click', () => {
         pinInput.value = '';
         pinError.classList.add('hidden');
-        pinModal.classList.remove('hidden');
+        openModal(pinModal);
         setTimeout(() => pinInput.focus(), 100);
     });
 }
@@ -783,7 +783,7 @@ if (widgetChat) {
 // Verify PIN logic
 function verifyPinAndOpenChat() {
     if (pinInput.value === '0517') {
-        pinModal.classList.add('hidden');
+        closeModal(pinModal);
         openSecretChat();
     } else {
         pinError.classList.remove('hidden');
@@ -798,24 +798,19 @@ if (pinInput) {
         if (e.key === 'Enter') verifyPinAndOpenChat();
     });
 }
-if (btnClosePin) {
-    btnClosePin.addEventListener('click', () => {
-        pinModal.classList.add('hidden');
-    });
-}
 
 function openSecretChat() {
     if (!secretChatModal) return;
-    secretChatModal.classList.remove('hidden');
+    openModal(secretChatModal);
     loadChatMessages();
     // Poll every 3 seconds while open
     clearInterval(chatPollInterval);
     chatPollInterval = setInterval(loadChatMessages, 3000);
 }
 
+// Clean up polling when closed
 if (btnCloseChat) {
     btnCloseChat.addEventListener('click', () => {
-        secretChatModal.classList.add('hidden');
         clearInterval(chatPollInterval);
     });
 }
