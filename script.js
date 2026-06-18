@@ -164,6 +164,7 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
 
 // ─────────────────────────────────────────────────────────────────
 // 4. TWO-PAGE BOOK SPREAD — 3D PAGE FLIP SYSTEM
+// Left panel = always her photo. Right panel = cycling pages.
 // ─────────────────────────────────────────────────────────────────
 
 const BOOK_PAGES = [
@@ -179,15 +180,25 @@ const BOOK_PAGES = [
     { type: 'back',    emoji: '💕', title: 'To be continued...', text: 'Every page of her story is better than the last.' },
 ];
 
-let bookLeftIdx   = -1;   // -1 = blank left page
-let bookRightIdx  = 0;    // 0  = cover
+let bookRightIdx  = 0;
 let bookAnimating = false;
 
-/** Build an HTML string for a single book page */
+/** Render her photo on the LEFT panel — always fixed */
+function renderLeftPhotoPanel() {
+    return `
+      <div class="page-photo-panel">
+        <div class="book-photo-wrap">
+          <div class="img-placeholder book-hero-photo" id="book-hero-photo">
+            <span class="ph-icon">🌸</span>
+            <span class="ph-label">Her Photo</span>
+          </div>
+          <div class="book-photo-caption">Vaishnavi 🌸</div>
+        </div>
+      </div>`;
+}
+
+/** Render page content for the RIGHT panel */
 function renderBookPage(idx) {
-    if (idx < 0) {
-        return `<div class="page-blank"><span class="page-blank-emoji">🌸</span></div>`;
-    }
     const p = BOOK_PAGES[idx];
     if (!p) return '';
 
@@ -208,7 +219,6 @@ function renderBookPage(idx) {
             <p style="font-size:0.9rem;color:var(--text-med);line-height:1.7;max-width:200px">${p.text}</p>
           </div>`;
     }
-    // Regular sticky note page
     return `
       <div class="book-sticky ${p.color}">
         <span class="book-sticky-icon">${p.emoji}</span>
@@ -220,12 +230,12 @@ function renderBookPage(idx) {
 function updateBookPanels() {
     const leftInner  = document.getElementById('left-page-inner');
     const rightInner = document.getElementById('right-page-inner');
-    const leftNum    = document.getElementById('left-page-num');
     const rightNum   = document.getElementById('right-page-num');
+    const leftNum    = document.getElementById('left-page-num');
 
-    if (leftInner)  leftInner.innerHTML  = renderBookPage(bookLeftIdx);
+    if (leftInner)  leftInner.innerHTML  = renderLeftPhotoPanel();
     if (rightInner) rightInner.innerHTML = renderBookPage(bookRightIdx);
-    if (leftNum)    leftNum.textContent  = bookLeftIdx > 0 ? `${bookLeftIdx}` : '';
+    if (leftNum)    leftNum.textContent  = '';
     if (rightNum)   rightNum.textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
 
     updateBookUI();
@@ -236,26 +246,23 @@ function updateBookUI() {
     const prevBtn = document.getElementById('btn-page-prev');
     const nextBtn = document.getElementById('btn-page-next');
 
-    const totalSpreads = Math.ceil((BOOK_PAGES.length + 1) / 2);
-    const currentSpread = bookRightIdx === 0 ? 0 : Math.floor((bookRightIdx + 1) / 2);
-
     if (dotsEl) {
         dotsEl.innerHTML = '';
-        for (let i = 0; i < totalSpreads; i++) {
+        for (let i = 0; i < BOOK_PAGES.length; i++) {
             const dot = document.createElement('div');
-            dot.className = 'book-dot' + (i === currentSpread ? ' active' : '');
+            dot.className = 'book-dot' + (i === bookRightIdx ? ' active' : '');
             dotsEl.appendChild(dot);
         }
     }
 
-    if (prevBtn) prevBtn.disabled = bookLeftIdx < 0;
+    if (prevBtn) prevBtn.disabled = bookRightIdx === 0;
     if (nextBtn) nextBtn.disabled = bookRightIdx >= BOOK_PAGES.length - 1;
 }
 
 function runFlip(forward) {
     if (bookAnimating) return;
     if (forward  && bookRightIdx >= BOOK_PAGES.length - 1) return;
-    if (!forward && bookLeftIdx < 0) return;
+    if (!forward && bookRightIdx <= 0) return;
 
     bookAnimating = true;
 
@@ -266,58 +273,54 @@ function runFlip(forward) {
     const rightInner   = document.getElementById('right-page-inner');
     if (!flipper || !flipperFront || !flipperBack) { bookAnimating = false; return; }
 
+    const isMobile = window.innerWidth <= 680;
+
     if (forward) {
-        // Flipper covers the RIGHT panel, rotates toward the left (spine)
+        // Flipper covers RIGHT panel → rotates left (toward spine)
         flipper.style.left         = 'auto';
         flipper.style.right        = '0';
-        flipper.style.width        = window.innerWidth <= 680 ? '100%' : '50%';
+        flipper.style.width        = isMobile ? '100%' : '50%';
         flipper.style.transformOrigin = 'left center';
 
-        // Front face = current right page content
-        flipperFront.style.borderRadius = window.innerWidth <= 680 ? '18px' : '0 18px 18px 0';
+        // Front = current right page (the page being turned away)
+        flipperFront.style.borderRadius = isMobile ? '18px' : '0 18px 18px 0';
         flipperFront.innerHTML = rightInner.innerHTML;
 
-        // Back face = what the right page looks like from the back (blank/warm gradient)
-        flipperBack.style.borderRadius  = window.innerWidth <= 680 ? '18px' : '18px 0 0 18px';
-        flipperBack.innerHTML = '';
+        // Back = her photo (revealed on the left after the flip)
+        flipperBack.style.borderRadius  = isMobile ? '18px' : '18px 0 0 18px';
+        flipperBack.innerHTML = renderLeftPhotoPanel();
+
     } else {
-        // Flipper covers the LEFT panel, rotates toward the right
+        // Flipper covers LEFT panel (photo side) → rotates right
         flipper.style.right        = 'auto';
         flipper.style.left         = '0';
-        flipper.style.width        = window.innerWidth <= 680 ? '100%' : '50%';
+        flipper.style.width        = isMobile ? '100%' : '50%';
         flipper.style.transformOrigin = 'right center';
 
-        // Front face = current left page content
-        flipperFront.style.borderRadius = window.innerWidth <= 680 ? '18px' : '18px 0 0 18px';
-        flipperFront.innerHTML = leftInner.innerHTML;
+        // Front = photo panel (the left side being "unflipped")
+        flipperFront.style.borderRadius = isMobile ? '18px' : '18px 0 0 18px';
+        flipperFront.innerHTML = renderLeftPhotoPanel();
 
-        // Back face blank
-        flipperBack.style.borderRadius  = window.innerWidth <= 680 ? '18px' : '0 18px 18px 0';
+        // Back = blank white
+        flipperBack.style.borderRadius  = isMobile ? '18px' : '0 18px 18px 0';
         flipperBack.innerHTML = '';
     }
 
-    // Show the flipper
+    // Show the flipper at 0deg (no animation yet)
     flipper.style.transform  = 'rotateY(0deg)';
     flipper.style.transition = 'none';
     flipper.classList.add('is-flipping');
 
-    // Update the underlying panels at the midpoint (page is edge-on / invisible)
+    // At midpoint: update the underlying panels (hidden behind the turning flipper)
     setTimeout(() => {
-        if (forward) {
-            bookLeftIdx  = bookRightIdx;
-            bookRightIdx = bookRightIdx + 1;
-        } else {
-            bookRightIdx = bookLeftIdx;
-            bookLeftIdx  = bookLeftIdx - 1;
-        }
-        leftInner.innerHTML  = renderBookPage(bookLeftIdx);
+        bookRightIdx = forward ? bookRightIdx + 1 : bookRightIdx - 1;
+        // Left panel always stays as photo — no change needed
         rightInner.innerHTML = renderBookPage(bookRightIdx);
-        document.getElementById('left-page-num').textContent  = bookLeftIdx > 0  ? `${bookLeftIdx}` : '';
         document.getElementById('right-page-num').textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
         updateBookUI();
     }, 350);
 
-    // Kick off the CSS rotation
+    // Kick off the CSS 3D rotation
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             flipper.style.transition = 'transform 0.7s cubic-bezier(0.645, 0.045, 0.355, 1)';
@@ -325,7 +328,7 @@ function runFlip(forward) {
         });
     });
 
-    // After animation completes — hide flipper and reset
+    // After animation: hide flipper + reset
     setTimeout(() => {
         flipper.classList.remove('is-flipping');
         flipper.style.transition = 'none';
@@ -335,8 +338,7 @@ function runFlip(forward) {
 }
 
 function initBook() {
-    bookLeftIdx  = -1;
-    bookRightIdx = 0;
+    bookRightIdx  = 0;
     bookAnimating = false;
     updateBookPanels();
 }

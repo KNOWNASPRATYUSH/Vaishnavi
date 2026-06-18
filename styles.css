@@ -973,6 +973,72 @@ body::before {
     opacity: 0.08;
 }
 
+/* ── BOOK LEFT PANEL: HER PHOTO ── */
+.page-photo-panel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+    background: linear-gradient(160deg, #fdf0ff 0%, #ffe8f4 100%);
+    border-radius: 18px 0 0 18px;
+    overflow: hidden;
+    padding: 1rem 0.8rem 1.4rem;
+    flex-direction: column;
+}
+
+.book-photo-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 0;
+}
+
+.book-hero-photo {
+    flex: 1;
+    width: 100%;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background: linear-gradient(135deg, rgba(255,200,230,0.3), rgba(220,180,255,0.3));
+    border: 2px dashed rgba(255, 100, 180, 0.25);
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* When real img is placed inside, let it fill the frame */
+.book-hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.book-hero-photo .ph-icon {
+    font-size: 2.5rem;
+    opacity: 0.5;
+}
+
+.book-hero-photo .ph-label {
+    font-size: 0.75rem;
+    color: var(--text-soft);
+    font-weight: 600;
+}
+
+.book-photo-caption {
+    font-family: 'Pacifico', cursive;
+    font-size: 0.88rem;
+    color: var(--pink);
+    text-align: center;
+    padding-top: 0.2rem;
+}
+
+
+
 /* Cover page */
 .page-cover {
     width: 100%;
