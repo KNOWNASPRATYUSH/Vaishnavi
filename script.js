@@ -587,7 +587,7 @@ setInterval(updateCounter, 1000);
 //     https://your-project-default-rtdb.firebaseio.com)
 //  7. Paste it below as FIREBASE_DB_URL
 // ─────────────────────────────────────────────────────────────────
-const FIREBASE_DB_URL = ''; // <-- PASTE YOUR FIREBASE URL HERE
+const FIREBASE_DB_URL = 'https://vaishnavibday-eeb65-default-rtdb.firebaseio.com'; // Firebase Realtime DB
 const LETTER_ENDPOINT = `${FIREBASE_DB_URL}/vaishnavi_letter.json`;
 const STORAGE_KEY     = 'vaishnavi_love_letter_v2';
 
