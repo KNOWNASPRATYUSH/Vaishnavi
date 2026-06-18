@@ -294,12 +294,8 @@ function runFlip(forward) {
         rightInner.innerHTML = renderBookPage(targetIdx);
         document.getElementById('right-page-num').textContent = targetIdx > 0 ? `${targetIdx}` : '';
         
-        // Left panel is hidden until flipper lands, so update it at midpoint
-        setTimeout(() => {
-            bookRightIdx = targetIdx;
-            leftInner.innerHTML = renderLeftPhotoPanel(bookRightIdx);
-            updateBookUI();
-        }, 350);
+        // Left panel is updated after the flip finishes
+        bookRightIdx = targetIdx;
 
     } else {
         // Flipper covers LEFT panel (photo side) → rotates right
@@ -319,29 +315,13 @@ function runFlip(forward) {
         // Left panel is revealed immediately behind the flipping page, so update it at 0ms
         leftInner.innerHTML = renderLeftPhotoPanel(targetIdx);
         
-        // Right panel is hidden until flipper lands, so update it at midpoint
-        setTimeout(() => {
-            bookRightIdx = targetIdx;
-            rightInner.innerHTML = renderBookPage(bookRightIdx);
-            document.getElementById('right-page-num').textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
-            updateBookUI();
-        }, 350);
-    }
-
-    // Ensure opacity is reset for the new animation
-    flipperFront.style.opacity = '1';
-    flipperBack.style.opacity = '0';
+        // Right panel is updated after the flip finishes
+        bookRightIdx = targetIdx;
 
     // Show the flipper at 0deg (no animation yet)
     flipper.style.transform  = 'rotateY(0deg)';
     flipper.style.transition = 'none';
     flipper.classList.add('is-flipping');
-
-    // At midpoint (90 degrees): hide front face, show back face to fix Safari 3D bleed bug
-    setTimeout(() => {
-        flipperFront.style.opacity = '0';
-        flipperBack.style.opacity = '1';
-    }, 350);
 
     // Kick off the CSS 3D rotation
     requestAnimationFrame(() => {
@@ -351,13 +331,22 @@ function runFlip(forward) {
         });
     });
 
-    // After animation: hide flipper + reset
+    // Cleanup after animation completes
     setTimeout(() => {
+        if (forward) {
+            leftInner.innerHTML = renderLeftPhotoPanel(bookRightIdx);
+            rightInner.innerHTML = renderBookPage(bookRightIdx);
+        } else {
+            leftInner.innerHTML = renderLeftPhotoPanel(bookRightIdx);
+            rightInner.innerHTML = renderBookPage(bookRightIdx);
+        }
+        document.getElementById('right-page-num').textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
+        updateBookUI();
         flipper.classList.remove('is-flipping');
         flipper.style.transition = 'none';
         flipper.style.transform  = 'rotateY(0deg)';
         bookAnimating = false;
-    }, 780);
+    }, 700);
 }
 
 function initBook() {
