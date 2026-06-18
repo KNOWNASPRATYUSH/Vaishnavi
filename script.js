@@ -577,15 +577,15 @@ updateCounter();
 setInterval(updateCounter, 1000);
 
 // ─────────────────────────────────────────────────────────────────
-// 10. LOVE LETTER — Auto-save to localStorage
+// 10. LOVE LETTER — Save button + localStorage persistence
 // ─────────────────────────────────────────────────────────────────
-const letterEl = document.getElementById('love-letter-content');
+const letterEl      = document.getElementById('love-letter-content');
+const btnSaveLetter = document.getElementById('btn-save-letter');
+const saveToast     = document.getElementById('save-toast');
+const STORAGE_KEY   = 'vaishnavi_love_letter_v2';
 
-if (letterEl) {
-    const STORAGE_KEY = 'vaishnavi_love_letter_v2';
-    
-    // Default starting content if empty
-    const defaultLetter = `Dear Vaishnavi,
+// Default content shown if nothing saved yet
+const defaultLetter = `Dear Vaishnavi,
 
 I just wanted to make this little corner of the internet for you. 
 
@@ -596,17 +596,35 @@ Feel free to write your own notes or edit this letter whenever you want. It's ou
 Love,
 Me 💕`;
 
+if (letterEl) {
+    // Restore saved letter or show default
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-        letterEl.innerHTML = saved;
-    } else {
-        letterEl.innerHTML = defaultLetter.replace(/\n/g, '<br>');
-    }
+    letterEl.innerHTML = saved ? saved : defaultLetter.replace(/\n/g, '<br>');
 
+    // Auto-save silently on every keystroke (safety net)
     letterEl.addEventListener('input', () => {
         localStorage.setItem(STORAGE_KEY, letterEl.innerHTML);
     });
 }
+
+// Save button — explicit save + toast feedback
+let toastTimer;
+if (btnSaveLetter && letterEl && saveToast) {
+    btnSaveLetter.addEventListener('click', () => {
+        // Save to localStorage
+        localStorage.setItem(STORAGE_KEY, letterEl.innerHTML);
+
+        // Show toast
+        saveToast.classList.add('show');
+
+        // Hide toast after 2.5s
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+            saveToast.classList.remove('show');
+        }, 2500);
+    });
+}
+
 
 // ─────────────────────────────────────────────────────────────────
 // 11. CLICK-TO-SPAWN FLOATING HEARTS

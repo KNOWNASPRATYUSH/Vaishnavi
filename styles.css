@@ -1744,6 +1744,70 @@ body::before {
     }
 }
 
+/* ── LOVE LETTER: SAVE BUTTON & TOAST ── */
+.letter-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.2rem;
+    justify-content: flex-end;
+}
+
+.btn-save-letter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.6rem;
+    border-radius: 24px;
+    border: none;
+    background: var(--grad-candy);
+    color: white;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(255, 77, 166, 0.28);
+    transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+}
+
+.btn-save-letter:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 10px 24px rgba(255, 77, 166, 0.38);
+}
+
+.btn-save-letter:active {
+    transform: scale(0.97);
+}
+
+/* Toast confirmation */
+.save-toast {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--pink);
+    background: var(--pink-pale);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    border: 1.5px solid var(--pink-light);
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(4px) scale(0.95);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.save-toast.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Override hidden from .hidden utility — toast uses .show instead */
+.save-toast.hidden {
+    display: inline-block;
+    visibility: visible;
+}
+
+
+
 @media (max-width: 480px) {
     .c-pill {
         min-width: 70px;
