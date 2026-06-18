@@ -74,7 +74,8 @@ function checkBirthday() {
 
         if (lastSeenYear !== currentYear) {
             // First time accessing today
-            openModal('modal-birthday');
+            const bdayModal = document.getElementById('modal-birthday');
+            if (bdayModal) openModal(bdayModal);
             localStorage.setItem('birthdaySeenYear', currentYear);
         }
     }
@@ -83,7 +84,8 @@ function checkBirthday() {
 const btnBdayClose = document.getElementById('btn-bday-close');
 if (btnBdayClose) {
     btnBdayClose.addEventListener('click', () => {
-        closeModal('modal-birthday');
+        const bdayModal = document.getElementById('modal-birthday');
+        if (bdayModal) closeModal(bdayModal);
     });
 }
 

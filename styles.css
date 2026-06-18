@@ -1813,6 +1813,10 @@ body::before {
     animation: floatBadge 3s ease-in-out infinite;
 }
 
+.birthday-badge.hidden {
+    display: none !important;
+}
+
 @keyframes floatBadge {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-5px); }
