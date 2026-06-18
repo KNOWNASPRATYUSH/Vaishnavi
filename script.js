@@ -771,6 +771,7 @@ const chatCameraInput = document.getElementById('chat-camera-input');
 const btnChatCamera = document.getElementById('btn-chat-camera');
 
 let chatPollInterval;
+let latestGlobalMessageTime = 0;
 
 // Open PIN modal when clicking the chat widget
 if (widgetChat) {
@@ -854,6 +855,12 @@ function renderChat(data) {
     if (!data) return;
     
     const messages = Object.values(data).sort((a, b) => a.time - b.time);
+    
+    // Track the time of the most recent message in the chat history
+    if (messages.length > 0) {
+        latestGlobalMessageTime = messages[messages.length - 1].time;
+    }
+    
     const currentName = senderToggle.checked ? 'Vaishnavi' : 'Pratyush';
 
     messages.forEach(msg => {
@@ -935,20 +942,14 @@ async function sendChatMessage(overrideText = null, imageBase64 = null) {
         
         loadChatMessages(); // instantly refresh
         
-        // Trigger Email Notification
-        if (typeof emailjs !== 'undefined') {
+        // Only send Email Notification if the last message was > 10 minutes ago
+        const TEN_MINUTES_MS = 10 * 60 * 1000;
+        const timeSinceLastMsg = Date.now() - latestGlobalMessageTime;
+        
+        if (typeof emailjs !== 'undefined' && timeSinceLastMsg > TEN_MINUTES_MS) {
             emailjs.send("service_2jq4x1f", "template_ihfljvi", {
                 message: `New secret message from ${sender}: "${text}"`
-            }).then(
-                function(res) {
-                    // Success! Let the user know
-                    alert("Debug: EmailJS successfully sent the email to Google's servers. If it's not in your inbox, it is 100% in your Spam folder or blocked by Gmail.");
-                },
-                function(err) {
-                    // Failure! Show the exact error
-                    alert("Debug: EmailJS Failed to send! Error: " + JSON.stringify(err));
-                }
-            );
+            }).catch(err => console.warn('EmailJS error:', err));
         }
     } catch (e) {
         console.error('Failed to send msg', e);
