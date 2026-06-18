@@ -317,6 +317,7 @@ function runFlip(forward) {
         
         // Right panel is updated after the flip finishes
         bookRightIdx = targetIdx;
+    }
 
     // Show the flipper at 0deg (no animation yet)
     flipper.style.transform  = 'rotateY(0deg)';
