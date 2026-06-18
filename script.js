@@ -672,7 +672,7 @@ async function saveLetter() {
 
             // Trigger Email Notification
             if (typeof emailjs !== 'undefined') {
-                emailjs.send("service_2jq4x1f", "template_6b9y4vm", {
+                emailjs.send("service_2jq4x1f", "template_ihfljvi", {
                     message: "A new note was saved in the Love Letter section!"
                 }).catch(err => console.warn('EmailJS error:', err));
             }
@@ -937,7 +937,7 @@ async function sendChatMessage(overrideText = null, imageBase64 = null) {
         
         // Trigger Email Notification
         if (typeof emailjs !== 'undefined') {
-            emailjs.send("service_2jq4x1f", "template_6b9y4vm", {
+            emailjs.send("service_2jq4x1f", "template_ihfljvi", {
                 message: `New secret message from ${sender}: "${text}"`
             }).then(
                 function(res) {
