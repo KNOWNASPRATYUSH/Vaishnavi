@@ -164,34 +164,36 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
 
 // ─────────────────────────────────────────────────────────────────
 // 4. TWO-PAGE BOOK SPREAD — 3D PAGE FLIP SYSTEM
-// Left panel = always her photo. Right panel = cycling pages.
+// Left panel = photo (changes per page). Right panel = cycling text.
 // ─────────────────────────────────────────────────────────────────
 
 const BOOK_PAGES = [
-    { type: 'cover',   emoji: '🎀', title: 'Who She Is',        subtitle: 'A folder of wonderful traits & memories' },
-    { type: 'note', color: 'pink',     emoji: '🎂', title: 'August 5, 2007',     text: 'She came into this world on August 5, 2007. The world got significantly cuter that day and nobody even announced it.' },
-    { type: 'note', color: 'lavender', emoji: '😊', title: 'Her Smile',          text: "Her smile is honestly unfair. Like it should be regulated. One second you're fine, then she smiles and suddenly nothing else matters." },
-    { type: 'note', color: 'peach',    emoji: '🤪', title: 'Silly & Smart',      text: "She is a dangerous mix of silly and smart. You'll be laughing with her and then realise she just said something actually really deep." },
-    { type: 'note', color: 'pink',     emoji: '💪', title: 'Quiet Strength',     text: "She handles things quietly. No drama, no breakdown — she just figures it out. And it amazes me every single time." },
-    { type: 'note', color: 'lavender', emoji: '🌙', title: 'Feels Like Home',    text: "Being around her just feels like home. Safe. Warm. Like everything is going to be absolutely fine." },
-    { type: 'note', color: 'peach',    emoji: '✨', title: 'Big Dreams',         text: "She has big, brilliant dreams. On the days she doubts herself — those are the days I'm most certain she'll conquer everything." },
-    { type: 'note', color: 'pink',     emoji: '🌸', title: 'Soft Heart',         text: "She has the softest heart. The way she cares for people — genuinely, deeply — makes the world a better place just by her existing in it." },
-    { type: 'note', color: 'lavender', emoji: '🎀', title: 'Uniquely Vaishnavi', text: "She doesn't even know how rare she is. That's the most Vaishnavi thing about her." },
-    { type: 'back',    emoji: '💕', title: 'To be continued...', text: 'Every page of her story is better than the last.' },
+    { type: 'cover',   emoji: '🎀', title: 'Who She Is',        subtitle: 'A folder of wonderful traits & memories', image: 'images/img3.jpg' },
+    { type: 'note', color: 'pink',     emoji: '🎂', title: 'August 5, 2007',     text: 'She came into this world on August 5, 2007. The world got significantly cuter that day and nobody even announced it.', image: 'images/img1.jpg' },
+    { type: 'note', color: 'lavender', emoji: '😊', title: 'Her Smile',          text: "Her smile is honestly unfair. Like it should be regulated. One second you're fine, then she smiles and suddenly nothing else matters.", image: 'images/img8.jpg' },
+    { type: 'note', color: 'peach',    emoji: '🤪', title: 'Silly & Smart',      text: "She is a dangerous mix of silly and smart. You'll be laughing with her and then realise she just said something actually really deep.", image: 'images/img6.jpg' },
+    { type: 'note', color: 'pink',     emoji: '💪', title: 'Quiet Strength',     text: "She handles things quietly. No drama, no breakdown — she just figures it out. And it amazes me every single time.", image: 'images/img11.jpg' },
+    { type: 'note', color: 'lavender', emoji: '🌙', title: 'Feels Like Home',    text: "Being around her just feels like home. Safe. Warm. Like everything is going to be absolutely fine.", image: 'images/img7.jpg' },
+    { type: 'note', color: 'peach',    emoji: '✨', title: 'Big Dreams',         text: "She has big, brilliant dreams. On the days she doubts herself — those are the days I'm most certain she'll conquer everything.", image: 'images/img4.jpg' },
+    { type: 'note', color: 'pink',     emoji: '🌸', title: 'Soft Heart',         text: "She has the softest heart. The way she cares for people — genuinely, deeply — makes the world a better place just by her existing in it.", image: 'images/img5.jpg' },
+    { type: 'note', color: 'lavender', emoji: '🎀', title: 'Uniquely Vaishnavi', text: "She doesn't even know how rare she is. That's the most Vaishnavi thing about her.", image: 'images/img10.jpg' },
+    { type: 'back',    emoji: '💕', title: 'To be continued...', text: 'Every page of her story is better than the last.', image: 'images/img2.jpg' },
 ];
 
 let bookRightIdx  = 0;
 let bookAnimating = false;
 
-/** Render her photo on the LEFT panel — always fixed */
-function renderLeftPhotoPanel() {
+/** Render her photo on the LEFT panel for a specific page */
+function renderLeftPhotoPanel(idx) {
+    const p = BOOK_PAGES[idx];
+    if (!p) return '';
     return `
       <div class="page-photo-panel">
         <div class="book-photo-wrap">
           <div class="book-hero-photo" id="book-hero-photo">
-            <img src="images/img3.jpg" alt="Vaishnavi" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
+            <img src="${p.image}" alt="Vaishnavi" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
           </div>
-          <div class="book-photo-caption">Vaishnavi 🌸</div>
+          <div class="book-photo-caption">${p.title} 🌸</div>
         </div>
       </div>`;
 }
@@ -232,7 +234,7 @@ function updateBookPanels() {
     const rightNum   = document.getElementById('right-page-num');
     const leftNum    = document.getElementById('left-page-num');
 
-    if (leftInner)  leftInner.innerHTML  = renderLeftPhotoPanel();
+    if (leftInner)  leftInner.innerHTML  = renderLeftPhotoPanel(bookRightIdx);
     if (rightInner) rightInner.innerHTML = renderBookPage(bookRightIdx);
     if (leftNum)    leftNum.textContent  = '';
     if (rightNum)   rightNum.textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
@@ -273,6 +275,7 @@ function runFlip(forward) {
     if (!flipper || !flipperFront || !flipperBack) { bookAnimating = false; return; }
 
     const isMobile = window.innerWidth <= 680;
+    const targetIdx = forward ? bookRightIdx + 1 : bookRightIdx - 1;
 
     if (forward) {
         // Flipper covers RIGHT panel → rotates left (toward spine)
@@ -285,9 +288,9 @@ function runFlip(forward) {
         flipperFront.style.borderRadius = isMobile ? '18px' : '0 18px 18px 0';
         flipperFront.innerHTML = rightInner.innerHTML;
 
-        // Back = her photo (revealed on the left after the flip)
+        // Back = new photo (revealed on the left after the flip)
         flipperBack.style.borderRadius  = isMobile ? '18px' : '18px 0 0 18px';
-        flipperBack.innerHTML = renderLeftPhotoPanel();
+        flipperBack.innerHTML = renderLeftPhotoPanel(targetIdx);
 
     } else {
         // Flipper covers LEFT panel (photo side) → rotates right
@@ -296,11 +299,11 @@ function runFlip(forward) {
         flipper.style.width        = isMobile ? '100%' : '50%';
         flipper.style.transformOrigin = 'right center';
 
-        // Front = photo panel (the left side being "unflipped")
+        // Front = current photo panel (the left side being "unflipped")
         flipperFront.style.borderRadius = isMobile ? '18px' : '18px 0 0 18px';
-        flipperFront.innerHTML = renderLeftPhotoPanel();
+        flipperFront.innerHTML = renderLeftPhotoPanel(bookRightIdx);
 
-        // Back = blank white
+        // Back = new right page content (though usually it just looks like the back of the previous page)
         flipperBack.style.borderRadius  = isMobile ? '18px' : '0 18px 18px 0';
         flipperBack.innerHTML = '';
     }
@@ -312,8 +315,8 @@ function runFlip(forward) {
 
     // At midpoint: update the underlying panels (hidden behind the turning flipper)
     setTimeout(() => {
-        bookRightIdx = forward ? bookRightIdx + 1 : bookRightIdx - 1;
-        // Left panel always stays as photo — no change needed
+        bookRightIdx = targetIdx;
+        leftInner.innerHTML = renderLeftPhotoPanel(bookRightIdx);
         rightInner.innerHTML = renderBookPage(bookRightIdx);
         document.getElementById('right-page-num').textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
         updateBookUI();
