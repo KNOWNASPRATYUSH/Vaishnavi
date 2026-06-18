@@ -818,15 +818,24 @@ if (btnCloseChat) {
 if (senderToggle) {
     senderToggle.addEventListener('change', (e) => {
         senderLabel.textContent = e.target.checked ? 'Her (Vaishnavi)' : 'Me (Pratyush)';
+        lastChatDataStr = ''; // Force DOM re-render to update alignments
         loadChatMessages(); // Refresh alignment based on identity
     });
 }
+
+let lastChatDataStr = '';
 
 async function loadChatMessages() {
     if (!FIREBASE_DB_URL || !chatMessages) return;
     try {
         const res = await fetch(`${FIREBASE_DB_URL}/secret_chat.json`);
         const data = await res.json();
+        
+        // Prevent re-rendering and repeating animations if nothing changed
+        const dataStr = JSON.stringify(data);
+        if (dataStr === lastChatDataStr) return; 
+        lastChatDataStr = dataStr;
+        
         renderChat(data);
     } catch (e) {
         console.warn('Chat load failed', e);
