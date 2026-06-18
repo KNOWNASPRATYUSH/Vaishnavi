@@ -767,6 +767,8 @@ const chatInput = document.getElementById('chat-input');
 const btnSendChat = document.getElementById('btn-send-chat');
 const senderToggle = document.getElementById('sender-toggle-input');
 const senderLabel = document.getElementById('sender-label');
+const chatCameraInput = document.getElementById('chat-camera-input');
+const btnChatCamera = document.getElementById('btn-chat-camera');
 
 let chatPollInterval;
 
@@ -890,7 +892,10 @@ function renderChat(data) {
         const displayHours = hours % 12 || 12;
         const timeStr = `${displayHours}:${mins} ${ampm}`;
         
+        const imgHtml = msg.image ? `<img src="${msg.image}" alt="Photo" onclick="window.open(this.src)" style="cursor:zoom-in;">` : '';
+        
         b.innerHTML = `
+            ${imgHtml}
             ${msg.text}
             <div class="chat-time">${timeStr}</div>
         `;
@@ -903,16 +908,20 @@ function renderChat(data) {
     }
 }
 
-async function sendChatMessage() {
-    const text = chatInput.value.trim();
-    if (!text || !FIREBASE_DB_URL) return;
+async function sendChatMessage(overrideText = null, imageBase64 = null) {
+    const text = overrideText !== null ? overrideText : chatInput.value.trim();
+    
+    // Only block if both text and image are empty
+    if (!text && !imageBase64) return;
+    if (!FIREBASE_DB_URL) return;
     
     const sender = senderToggle.checked ? 'Vaishnavi' : 'Pratyush';
     
     // Use Firebase Server Timestamp to prevent out-of-order messages from device clock differences
     const msg = { text, sender, time: { ".sv": "timestamp" } };
+    if (imageBase64) msg.image = imageBase64;
     
-    chatInput.value = ''; // clear input
+    if (overrideText === null) chatInput.value = ''; // clear input only if typing
     
     // We removed the local hardcoded bubble so it doesn't jump sides when toggling identity.
     // Instead we rely purely on the 1-second live poll to fetch the definitive chat history immediately.
@@ -937,7 +946,56 @@ async function sendChatMessage() {
     }
 }
 
-if (btnSendChat) btnSendChat.addEventListener('click', sendChatMessage);
-if (chatInput) chatInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendChatMessage();
-});
+if (btnSendChat) btnSendChat.addEventListener('click', () => sendChatMessage());
+if (chatInput) {
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChatMessage();
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 14. CAMERA UPLOAD COMPRESSION & SENDING
+// ─────────────────────────────────────────────────────────────────
+if (btnChatCamera && chatCameraInput) {
+    btnChatCamera.addEventListener('click', () => {
+        chatCameraInput.click();
+    });
+
+    chatCameraInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                // Compress image with Canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                const MAX_WIDTH = 800; // Cap width to save Firebase bandwidth
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > MAX_WIDTH) {
+                    height = Math.round((height * MAX_WIDTH) / width);
+                    width = MAX_WIDTH;
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Get compressed base64 string (60% JPEG quality)
+                const base64Str = canvas.toDataURL('image/jpeg', 0.6); 
+                
+                sendChatMessage("📷 Sent a photo", base64Str);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+        
+        // Reset input
+        chatCameraInput.value = '';
+    });
+}
