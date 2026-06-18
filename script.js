@@ -803,9 +803,9 @@ function openSecretChat() {
     if (!secretChatModal) return;
     openModal(secretChatModal);
     loadChatMessages();
-    // Poll every 3 seconds while open
+    // Poll every 1 second while open for live real-time sync
     clearInterval(chatPollInterval);
-    chatPollInterval = setInterval(loadChatMessages, 3000);
+    chatPollInterval = setInterval(loadChatMessages, 1000);
 }
 
 // Clean up polling when closed
@@ -847,8 +847,32 @@ function renderChat(data) {
 
     messages.forEach(msg => {
         const isSentByMe = msg.sender === currentName;
+        
+        // Wrap bubble to add sender name if it's received
+        const wrap = document.createElement('div');
+        wrap.className = `chat-bubble-wrap ${isSentByMe ? 'sent' : 'received'}`;
+        wrap.style.display = 'flex';
+        wrap.style.flexDirection = 'column';
+        wrap.style.alignItems = isSentByMe ? 'flex-end' : 'flex-start';
+        wrap.style.maxWidth = '75%';
+        wrap.style.alignSelf = isSentByMe ? 'flex-end' : 'flex-start';
+
+        if (!isSentByMe) {
+            const nameLabel = document.createElement('span');
+            nameLabel.style.fontSize = '0.7rem';
+            nameLabel.style.fontWeight = 'bold';
+            nameLabel.style.color = 'var(--text-med)';
+            nameLabel.style.marginBottom = '2px';
+            nameLabel.style.marginLeft = '4px';
+            nameLabel.textContent = msg.sender;
+            wrap.appendChild(nameLabel);
+        }
+
         const b = document.createElement('div');
         b.className = `chat-bubble ${isSentByMe ? 'sent' : 'received'}`;
+        // We handle alignment in the wrap now, but keep classes for styling
+        b.style.maxWidth = '100%';
+        b.style.alignSelf = 'auto';
         
         const date = new Date(msg.time);
         const hours = date.getHours();
@@ -861,7 +885,8 @@ function renderChat(data) {
             ${msg.text}
             <div class="chat-time">${timeStr}</div>
         `;
-        chatMessages.appendChild(b);
+        wrap.appendChild(b);
+        chatMessages.appendChild(wrap);
     });
     
     if (isAtBottom) {
@@ -878,12 +903,8 @@ async function sendChatMessage() {
     
     chatInput.value = ''; // clear input
     
-    // Add locally immediately for instant feedback
-    const b = document.createElement('div');
-    b.className = 'chat-bubble sent';
-    b.innerHTML = `${text} <div class="chat-time">Just now</div>`;
-    chatMessages.appendChild(b);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    // We removed the local hardcoded bubble so it doesn't jump sides when toggling identity.
+    // Instead we rely purely on the 1-second live poll to fetch the definitive chat history immediately.
     
     try {
         await fetch(`${FIREBASE_DB_URL}/secret_chat.json`, {
@@ -891,6 +912,8 @@ async function sendChatMessage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(msg)
         });
+        
+        loadChatMessages(); // instantly refresh
         
         // Trigger Email Notification
         if (typeof emailjs !== 'undefined') {
