@@ -1,6 +1,7 @@
 /* ================================================================
    Her Universe — script.js
-   Chapter navigation, counter, bubbles, hearts, film drag, letter
+   Bento Dashboard interactions, booklet flip, wax seal envelope, 
+   love jar shake, polaroid previewer, bubbles, hearts, and live counter.
    ================================================================ */
 
 'use strict';
@@ -38,88 +39,341 @@
     }
 })();
 
-
 // ─────────────────────────────────────────────────────────────────
-// 2. CHAPTER NAVIGATION SYSTEM
+// 2. CURTAIN UNLOCK / ENTRY
 // ─────────────────────────────────────────────────────────────────
-const chapters   = Array.from(document.querySelectorAll('.chapter'));
-const dockBtns   = Array.from(document.querySelectorAll('.dock-btn'));
-const dock       = document.getElementById('chapter-dock');
-let   activeChapter = 0;
+const btnUnlock     = document.getElementById('btn-unlock');
+const introCurtain   = document.getElementById('intro-curtain');
+const mainDashboard = document.getElementById('main-dashboard');
 
-function goToChapter(index, source) {
-    if (index === activeChapter) return;
+if (btnUnlock && introCurtain && mainDashboard) {
+    btnUnlock.addEventListener('click', () => {
+        // Trigger heart particles from button click
+        spawnHeartsAround(btnUnlock);
 
-    // Transition out
-    chapters[activeChapter].classList.add('hidden');
-
-    // Transition in
-    activeChapter = index;
-    chapters[activeChapter].classList.remove('hidden');
-
-    // Scroll new chapter's content back to top
-    const scrollable = chapters[activeChapter].querySelector('.ch-scroll-y');
-    if (scrollable) scrollable.scrollTop = 0;
-
-    // Update dock active state
-    dockBtns.forEach((btn, i) => {
-        btn.classList.toggle('active', i === activeChapter);
+        introCurtain.classList.add('fade-out');
+        
+        setTimeout(() => {
+            introCurtain.classList.add('hidden');
+            mainDashboard.classList.remove('hidden');
+            // Trigger bento cards entry animations if any
+        }, 800);
     });
-
-    // Hide dock on landing page, show on others
-    dock.style.opacity = activeChapter === 0 ? '0' : '1';
-    dock.style.pointerEvents = activeChapter === 0 ? 'none' : 'auto';
-
-    // Trigger reveal animations for newly visible chapter
-    setTimeout(() => triggerReveal(chapters[activeChapter]), 120);
 }
 
-// Dock button clicks
-dockBtns.forEach((btn, i) => {
-    btn.addEventListener('click', () => goToChapter(i, 'dock'));
+function spawnHeartsAround(element) {
+    const rect = element.getBoundingClientRect();
+    const count = 12;
+    for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+            const el = document.createElement('span');
+            el.textContent = ['💕', '💖', '🌸', '✨', '💗'][Math.floor(Math.random() * 5)];
+            el.className = 'heart-deco';
+            const size = Math.random() * 10 + 16;
+            
+            Object.assign(el.style, {
+                left: `${rect.left + rect.width / 2 + (Math.random() - 0.5) * 120}px`,
+                top: `${rect.top + rect.height / 2 + (Math.random() - 0.5) * 40}px`,
+                fontSize: `${size}px`,
+                animationDuration: `${Math.random() * 0.4 + 0.8}s`
+            });
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1200);
+        }, i * 30);
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 3. WIDGET CLICKS / MODALS CONTROLLER
+// ─────────────────────────────────────────────────────────────────
+const widgetWho       = document.getElementById('widget-who');
+const widgetJourney   = document.getElementById('widget-journey');
+const widgetMoment    = document.getElementById('widget-moment');
+const widgetPolaroids = document.getElementById('widget-polaroids');
+
+const modalWho        = document.getElementById('modal-who');
+const modalJourney    = document.getElementById('modal-journey');
+const modalMoment     = document.getElementById('modal-moment');
+const modalPolaroids  = document.getElementById('modal-polaroids');
+const modalLetter     = document.getElementById('modal-letter');
+
+function openModal(modalEl) {
+    modalEl.classList.remove('hidden');
+    // Force reflow
+    void modalEl.offsetWidth;
+    modalEl.classList.add('visible');
+}
+
+function closeModal(modalEl) {
+    modalEl.classList.remove('visible');
+    setTimeout(() => {
+        modalEl.classList.add('hidden');
+    }, 400);
+}
+
+// Attach widget click triggers
+if (widgetWho && modalWho) {
+    widgetWho.addEventListener('click', () => openModal(modalWho));
+}
+if (widgetJourney && modalJourney) {
+    widgetJourney.addEventListener('click', () => {
+        openModal(modalJourney);
+        // Reset scroll position of journey timeline
+        const filmWrap = document.getElementById('journey-film-wrap');
+        if (filmWrap) filmWrap.scrollLeft = 0;
+    });
+}
+if (widgetMoment && modalMoment) {
+    widgetMoment.addEventListener('click', () => openModal(modalMoment));
+}
+if (widgetPolaroids && modalPolaroids) {
+    widgetPolaroids.addEventListener('click', () => openModal(modalPolaroids));
+}
+
+// Global modal close buttons
+document.querySelectorAll('.modal-overlay .btn-close').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const modal = e.target.closest('.modal-overlay');
+        if (modal) {
+            closeModal(modal);
+            // Specific resets
+            if (modal.id === 'modal-letter') {
+                const waxSeal = document.getElementById('wax-seal');
+                if (waxSeal) waxSeal.classList.remove('broken');
+            }
+        }
+    });
 });
 
-// Landing "Enter Her World" button
-const btnEnter = document.getElementById('btn-enter');
-if (btnEnter) {
-    btnEnter.addEventListener('click', () => goToChapter(1, 'enter'));
-}
-
-// Initial state — hide dock on landing
-dock.style.opacity      = '0';
-dock.style.pointerEvents = 'none';
-dock.style.transition   = 'opacity 0.4s ease';
-
-
-// ─────────────────────────────────────────────────────────────────
-// 3. SCROLL REVEAL — Per-Chapter IntersectionObserver
-// ─────────────────────────────────────────────────────────────────
-const observerPool = new Map(); // chapter index → observer
-
-function triggerReveal(chapterEl) {
-    const revealEls = chapterEl.querySelectorAll('.reveal-fade:not(.visible)');
-
-    // Already-visible ones — skip
-    if (!revealEls.length) return;
-
-    const obs = new IntersectionObserver((entries, self) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                self.unobserve(entry.target);
+// Close modal on background click
+document.querySelectorAll('.modal-overlay').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal(modal);
+            if (modal.id === 'modal-letter') {
+                const waxSeal = document.getElementById('wax-seal');
+                if (waxSeal) waxSeal.classList.remove('broken');
             }
-        });
-    }, { root: null, rootMargin: '0px', threshold: 0.1 });
-
-    revealEls.forEach(el => obs.observe(el));
-}
-
-// Trigger for the initial chapter (landing)
-triggerReveal(chapters[0]);
+        }
+    });
+});
 
 
 // ─────────────────────────────────────────────────────────────────
-// 4. LIFE COUNTER — Live Tick Every Second
+// 4. BOOKLET PAGE FLIP SYSTEM
+// ─────────────────────────────────────────────────────────────────
+const pages = Array.from(document.querySelectorAll('.book-page'));
+const btnPrevPage = document.getElementById('btn-page-prev');
+const btnNextPage = document.getElementById('btn-page-next');
+let currentPageIndex = 0; // index of the page that will flip next
+
+function flipNext() {
+    if (currentPageIndex < pages.length - 1) {
+        const page = pages[currentPageIndex];
+        page.classList.add('flipped');
+        page.style.zIndex = currentPageIndex + 1;
+        currentPageIndex++;
+    }
+}
+
+function flipPrev() {
+    if (currentPageIndex > 0) {
+        currentPageIndex--;
+        const page = pages[currentPageIndex];
+        page.classList.remove('flipped');
+        page.style.zIndex = pages.length - currentPageIndex;
+    }
+}
+
+if (btnNextPage && btnPrevPage) {
+    btnNextPage.addEventListener('click', flipNext);
+    btnPrevPage.addEventListener('click', flipPrev);
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 5. WAX SEAL & ENVELOPE INTERACTION
+// ─────────────────────────────────────────────────────────────────
+const waxSeal        = document.getElementById('wax-seal');
+const widgetEnvelope = document.getElementById('widget-envelope');
+
+if (waxSeal && modalLetter) {
+    waxSeal.addEventListener('click', (e) => {
+        e.stopPropagation(); // Avoid triggering container clicks
+        
+        // Break seal animation
+        waxSeal.classList.add('broken');
+        
+        // After seal breaks, zoom open the love letter modal
+        setTimeout(() => {
+            openModal(modalLetter);
+        }, 700);
+    });
+}
+
+if (widgetEnvelope && modalLetter) {
+    widgetEnvelope.addEventListener('click', () => {
+        openModal(modalLetter);
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 6. COMPLIMENT LOVE JAR
+// ─────────────────────────────────────────────────────────────────
+const jarGraphic       = document.getElementById('love-jar-click');
+const complimentBubble = document.getElementById('compliment-bubble');
+const complimentText   = document.getElementById('compliment-text');
+
+const COMPLIMENTS = [
+    "Your smile can literally light up the darkest rooms. ☀️",
+    "You have this quiet strength that is so inspiring. 💪",
+    "You make the most ordinary moments feel like a movie scene. 🎬",
+    "The way you care about others makes the world a better place. 🌸",
+    "You are my favorite person to laugh with. 😂",
+    "You're a dangerous mix of incredibly smart and adorably silly. 🤪",
+    "No matter how busy the day is, talking to you feels like coming home. 🌙",
+    "I believe in your dreams even more than you do. You'll conquer everything! 🌟",
+    "You don't even realize how rare and special you are. 🎀",
+    "My favorite place in the world is right next to you. 💕",
+    "You are, hands down, the most magical person I know. ✨",
+    "Your kindness is soft but it changes everything around you. 🌺"
+];
+
+let jarShakeTimeout;
+
+if (jarGraphic && complimentBubble && complimentText) {
+    jarGraphic.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        // Shake animation
+        jarGraphic.classList.remove('shake');
+        void jarGraphic.offsetWidth; // Reflow
+        jarGraphic.classList.add('shake');
+
+        // Spawn little rising hearts from the jar coordinates
+        const rect = jarGraphic.getBoundingClientRect();
+        for (let i = 0; i < 6; i++) {
+            const h = document.createElement('span');
+            h.textContent = ['💖', '🌸', '✨', '💕'][Math.floor(Math.random() * 4)];
+            h.className = 'heart-deco';
+            const size = Math.random() * 8 + 14;
+            Object.assign(h.style, {
+                left: `${rect.left + rect.width / 2 + (Math.random() - 0.5) * 40}px`,
+                top: `${rect.top}px`,
+                fontSize: `${size}px`,
+                animationDuration: `${Math.random() * 0.4 + 0.8}s`
+            });
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 1200);
+        }
+
+        // Show a random compliment in the speech bubble
+        const randomCompliment = COMPLIMENTS[Math.floor(Math.random() * COMPLIMENTS.length)];
+        complimentText.textContent = randomCompliment;
+        
+        complimentBubble.classList.remove('hidden');
+        
+        clearTimeout(jarShakeTimeout);
+        jarShakeTimeout = setTimeout(() => {
+            jarGraphic.classList.remove('shake');
+        }, 400);
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 7. POLAROIDS GALLERY & PREVIEW
+// ─────────────────────────────────────────────────────────────────
+const photoPreviewer        = document.getElementById('photo-previewer');
+const previewerImg          = document.getElementById('previewer-img');
+const previewerPlaceholder  = document.getElementById('previewer-placeholder');
+const previewerCaption      = document.getElementById('previewer-caption');
+const btnPreviewClose       = document.querySelector('.photo-preview-overlay .btn-preview-close');
+
+function previewPolaroid(polaroidEl) {
+    const img = polaroidEl.querySelector('img');
+    const placeholder = polaroidEl.querySelector('.img-placeholder');
+    const caption = polaroidEl.querySelector('.polaroid-caption');
+
+    if (img && img.src) {
+        previewerImg.src = img.src;
+        previewerImg.classList.remove('hidden');
+        previewerPlaceholder.classList.add('hidden');
+    } else {
+        // Use placeholder content (emojis)
+        previewerImg.classList.add('hidden');
+        previewerPlaceholder.classList.remove('hidden');
+        const icon = placeholder ? placeholder.querySelector('.ph-icon').textContent : '📸';
+        previewerPlaceholder.querySelector('.ph-icon').textContent = icon;
+    }
+
+    previewerCaption.textContent = caption ? caption.textContent : 'Memory 🤍';
+    
+    photoPreviewer.classList.remove('hidden');
+    void photoPreviewer.offsetWidth;
+    photoPreviewer.classList.add('visible');
+}
+
+document.querySelectorAll('.polaroid').forEach(pol => {
+    pol.addEventListener('click', (e) => {
+        e.stopPropagation();
+        previewPolaroid(pol);
+    });
+});
+
+if (photoPreviewer) {
+    photoPreviewer.addEventListener('click', (e) => {
+        if (e.target === photoPreviewer || e.target.classList.contains('btn-preview-close')) {
+            photoPreviewer.classList.remove('visible');
+            setTimeout(() => photoPreviewer.classList.add('hidden'), 300);
+        }
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 8. FILM STRIP TIMELINE MOUSE & TOUCH DRAG
+// ─────────────────────────────────────────────────────────────────
+const filmWrap = document.getElementById('journey-film-wrap');
+
+if (filmWrap) {
+    let isDown  = false;
+    let startX  = 0;
+    let scrollL = 0;
+
+    filmWrap.addEventListener('mousedown', e => {
+        isDown  = true;
+        filmWrap.classList.add('active');
+        startX  = e.pageX - filmWrap.offsetLeft;
+        scrollL = filmWrap.scrollLeft;
+    });
+    filmWrap.addEventListener('mouseleave', () => { isDown = false; filmWrap.classList.remove('active'); });
+    filmWrap.addEventListener('mouseup',    () => { isDown = false; filmWrap.classList.remove('active'); });
+    filmWrap.addEventListener('mousemove', e => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x    = e.pageX - filmWrap.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        filmWrap.scrollLeft = scrollL - walk;
+    });
+
+    filmWrap.addEventListener('touchstart', e => {
+        const touch = e.touches[0];
+        isDown  = true;
+        filmWrap.classList.add('active');
+        startX  = touch.pageX - filmWrap.offsetLeft;
+        scrollL = filmWrap.scrollLeft;
+    });
+    filmWrap.addEventListener('touchend', () => { isDown = false; filmWrap.classList.remove('active'); });
+    filmWrap.addEventListener('touchcancel', () => { isDown = false; filmWrap.classList.remove('active'); });
+    filmWrap.addEventListener('touchmove', e => {
+        if (!isDown) return;
+        const touch = e.touches[0];
+        const x    = touch.pageX - filmWrap.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        filmWrap.scrollLeft = scrollL - walk;
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// 9. LIFE COUNTER — Live Tick Every Second
 // ─────────────────────────────────────────────────────────────────
 const BIRTH = new Date('2007-08-05T00:00:00');
 
@@ -166,78 +420,46 @@ function updateCounter() {
 updateCounter();
 setInterval(updateCounter, 1000);
 
-
 // ─────────────────────────────────────────────────────────────────
-// 5. FILM STRIP — Mouse Drag to Scroll (Ch. 2)
-// ─────────────────────────────────────────────────────────────────
-const filmWrap = document.querySelector('.film-strip-wrap');
-
-if (filmWrap) {
-    let isDown  = false;
-    let startX  = 0;
-    let scrollL = 0;
-
-    // Mouse events
-    filmWrap.addEventListener('mousedown', e => {
-        isDown  = true;
-        filmWrap.classList.add('active');
-        startX  = e.pageX - filmWrap.offsetLeft;
-        scrollL = filmWrap.scrollLeft;
-    });
-    filmWrap.addEventListener('mouseleave', () => { isDown = false; filmWrap.classList.remove('active'); });
-    filmWrap.addEventListener('mouseup',    () => { isDown = false; filmWrap.classList.remove('active'); });
-    filmWrap.addEventListener('mousemove', e => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x    = e.pageX - filmWrap.offsetLeft;
-        const walk = (x - startX) * 1.5;
-        filmWrap.scrollLeft = scrollL - walk;
-    });
-
-    // Touch events for mobile
-    filmWrap.addEventListener('touchstart', e => {
-        const touch = e.touches[0];
-        isDown  = true;
-        filmWrap.classList.add('active');
-        startX  = touch.pageX - filmWrap.offsetLeft;
-        scrollL = filmWrap.scrollLeft;
-    });
-    filmWrap.addEventListener('touchend', () => { isDown = false; filmWrap.classList.remove('active'); });
-    filmWrap.addEventListener('touchcancel', () => { isDown = false; filmWrap.classList.remove('active'); });
-    filmWrap.addEventListener('touchmove', e => {
-        if (!isDown) return;
-        const touch = e.touches[0];
-        const x    = touch.pageX - filmWrap.offsetLeft;
-        const walk = (x - startX) * 1.5;
-        filmWrap.scrollLeft = scrollL - walk;
-    });
-}
-
-
-// ─────────────────────────────────────────────────────────────────
-// 6. LOVE LETTER — Auto-save to localStorage
+// 10. LOVE LETTER — Auto-save to localStorage
 // ─────────────────────────────────────────────────────────────────
 const letterEl = document.getElementById('love-letter-content');
 
 if (letterEl) {
     const STORAGE_KEY = 'vaishnavi_love_letter_v2';
+    
+    // Default starting content if empty
+    const defaultLetter = `Dear Vaishnavi,
+
+I just wanted to make this little corner of the internet for you. 
+
+You make my life so much brighter, and this is my small way of keeping all those memories, traits, and milestones safe.
+
+Feel free to write your own notes or edit this letter whenever you want. It's our space.
+
+Love,
+Me 💕`;
+
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) letterEl.innerHTML = saved;
+    if (saved) {
+        letterEl.innerHTML = saved;
+    } else {
+        letterEl.innerHTML = defaultLetter.replace(/\n/g, '<br>');
+    }
 
     letterEl.addEventListener('input', () => {
         localStorage.setItem(STORAGE_KEY, letterEl.innerHTML);
     });
 }
 
-
 // ─────────────────────────────────────────────────────────────────
-// 7. CLICK-TO-SPAWN FLOATING HEARTS
+// 11. CLICK-TO-SPAWN FLOATING HEARTS
 // ─────────────────────────────────────────────────────────────────
 const HEARTS = ['💕', '💖', '🌸', '✨', '💗', '💝', '🌺', '💫', '🎀'];
 
 document.addEventListener('click', e => {
     // Skip interactive elements
-    if (e.target.closest('button, a, [contenteditable], input, textarea')) return;
+    if (e.target.closest('button, a, [contenteditable], input, textarea, .bento-card, .polaroid')) return;
 
     const el = document.createElement('span');
     el.textContent = HEARTS[Math.floor(Math.random() * HEARTS.length)];
@@ -255,24 +477,16 @@ document.addEventListener('click', e => {
     setTimeout(() => el.remove(), 1500);
 });
 
-
 // ─────────────────────────────────────────────────────────────────
-// 8. KEYBOARD NAVIGATION (Arrow keys / number keys)
+// 12. KEYBOARD NAVIGATION
 // ─────────────────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
-    // Skip if user is typing in the letter
+    // Skip if typing in the letter
     if (document.activeElement === letterEl) return;
 
-    if (e.key === 'ArrowRight' && activeChapter < chapters.length - 1) {
-        goToChapter(activeChapter + 1, 'keyboard');
-    }
-    if (e.key === 'ArrowLeft' && activeChapter > 0) {
-        goToChapter(activeChapter - 1, 'keyboard');
-    }
-
-    // Number keys 1–5 → chapters 0–4
-    const num = parseInt(e.key);
-    if (!isNaN(num) && num >= 1 && num <= 5) {
-        goToChapter(num - 1, 'keyboard');
+    // Flip pages if who-she-is modal is open
+    if (modalWho && modalWho.classList.contains('visible')) {
+        if (e.key === 'ArrowRight') flipNext();
+        if (e.key === 'ArrowLeft') flipPrev();
     }
 });

@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vaishnavi 💕 — Her Universe</title>
-    <meta name="description" content="A personal universe made just for Vaishnavi — her journey, her story, and the moment everything changed.">
+    <meta name="description" content="An interactive universe made just for Vaishnavi — her journey, her story, and the moment everything changed.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,14 +16,14 @@
     <div id="bubble-container"></div>
 
     <!-- ╔══════════════════════════════════════╗
-         ║  CHAPTER 0 — HER WORLD (LANDING)    ║
+         ║  INTRO CURTAIN / LOCK SCREEN         ║
          ╚══════════════════════════════════════╝ -->
-    <section class="chapter" id="ch-0" data-chapter="0">
-        <div class="ch-center">
-
-            <div class="landing-badge reveal-fade">✨ A little universe, made just for you</div>
-
-            <div class="landing-photo-ring reveal-fade">
+    <div id="intro-curtain" class="curtain-container">
+        <div class="curtain-glow"></div>
+        <div class="curtain-card glass-card reveal-fade visible">
+            <div class="landing-badge">✨ A little universe, made just for you</div>
+            
+            <div class="landing-photo-ring">
                 <div class="img-placeholder landing-photo">
                     <span class="ph-icon">🌸</span>
                     <span>Her photo goes here</span>
@@ -36,138 +36,364 @@
                 <span class="orbit-heart" style="--angle:288deg">🌺</span>
             </div>
 
-            <h1 class="landing-title reveal-fade">Vaishnavi</h1>
-            <p class="landing-sub reveal-fade">The most magical person I know — <em>and this is her world</em> 🌸</p>
+            <h1 class="curtain-title">Vaishnavi</h1>
+            <p class="curtain-subtitle">The most magical person I know — <em>and this is her world</em> 🌸</p>
 
-            <button class="btn-enter reveal-fade" id="btn-enter" aria-label="Enter Her World">
-                Enter Her World &nbsp;→
+            <button class="btn-unlock" id="btn-unlock" aria-label="Unlock Her World">
+                Unlock Her World &nbsp;🔑
             </button>
-
         </div>
-    </section>
+    </div>
 
     <!-- ╔══════════════════════════════════════╗
-         ║  CHAPTER 1 — WHO SHE IS             ║
+         ║  MAIN BENTO DASHBOARD CONTAINER      ║
          ╚══════════════════════════════════════╝ -->
-    <section class="chapter hidden" id="ch-1" data-chapter="1">
-        <div class="ch-scroll-y">
-            <div class="ch-header">
-                <div class="chapter-num">01</div>
-                <h2 class="ch-title">Who She Is</h2>
-                <p class="ch-sub">The things about her only I'd know 🤍</p>
+    <div id="main-dashboard" class="dashboard-wrap hidden">
+        <header class="db-header">
+            <h1 class="db-title">Vaishnavi's Universe 🌸</h1>
+            <p class="db-subtitle">Every little thing that makes her special, captured in one interactive space.</p>
+        </header>
+
+        <div class="bento-grid">
+            
+            <!-- WIDGET 1: WHO SHE IS (FLIP BOOKLET) -->
+            <div class="bento-card card-who glass-card" id="widget-who">
+                <div class="card-glow" style="background: radial-gradient(circle, rgba(255, 77, 166, 0.15) 0%, transparent 70%);"></div>
+                <div class="card-body">
+                    <div class="card-icon">📖</div>
+                    <h2 class="card-title">Who She Is</h2>
+                    <p class="card-desc">Flip through the chapters of what makes her so incredibly special.</p>
+                    <div class="mini-book-graphic">
+                        <div class="mini-page-left">🎂 05.08</div>
+                        <div class="mini-page-right">✨ Rare</div>
+                    </div>
+                </div>
+                <span class="action-hint">Tap to Open Book 🌸</span>
             </div>
 
-            <div class="sticky-board">
-
-                <div class="sticky pink reveal-fade" style="--r: -3deg; --tx: 0px; --ty: 0px;">
-                    <span class="sticky-icon">🎂</span>
-                    <p>She came into this world on <strong>August 5, 2007</strong>. The world got significantly cuter that day and nobody even announced it.</p>
+            <!-- WIDGET 2: LIVE COUNTER -->
+            <div class="bento-card card-counter glass-card" id="widget-counter">
+                <div class="card-glow" style="background: radial-gradient(circle, rgba(146, 84, 222, 0.12) 0%, transparent 70%);"></div>
+                <div class="card-body">
+                    <div class="counter-label">She's been making my world better for...</div>
+                    <div class="counter-grid">
+                        <div class="c-pill">
+                            <span class="c-val" id="count-years">0</span>
+                            <span class="c-lbl">Years</span>
+                        </div>
+                        <div class="c-pill">
+                            <span class="c-val" id="count-months">0</span>
+                            <span class="c-lbl">Months</span>
+                        </div>
+                        <div class="c-pill">
+                            <span class="c-val" id="count-days">0</span>
+                            <span class="c-lbl">Days</span>
+                        </div>
+                        <div class="c-pill highlight">
+                            <span class="c-val" id="count-seconds">0</span>
+                            <span class="c-lbl">Seconds</span>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="sticky lavender reveal-fade" style="--r: 2deg; --tx: 0px; --ty: 0px;">
-                    <span class="sticky-icon">😊</span>
-                    <p>Her smile is honestly unfair. Like it should be regulated. One second you're fine, then she smiles and suddenly nothing else matters.</p>
-                </div>
-
-                <div class="sticky peach reveal-fade" style="--r: -2deg; --tx: 0px; --ty: 0px;">
-                    <span class="sticky-icon">🤪</span>
-                    <p>She is a dangerous mix of silly and smart. You'll be laughing with her and then realise she just said something actually really deep.</p>
-                </div>
-
-                <div class="sticky pink reveal-fade" style="--r: 3deg; --tx: 0px; --ty: 0px;">
-                    <span class="sticky-icon">💪</span>
-                    <p>She handles things quietly. No drama, no breakdown — she just figures it out. And it amazes me every single time.</p>
-                </div>
-
-                <div class="sticky lavender reveal-fade" style="--r: -1deg; --tx: 0px; --ty: 0px;">
-                    <span class="sticky-icon">🌙</span>
-                    <p>Being around her just feels like home. Safe. Warm. Like everything is going to be absolutely fine.</p>
-                </div>
-
-                <div class="sticky peach reveal-fade" style="--r: 4deg; --tx: 0px; --ty: 0px;">
-                    <span class="sticky-icon">✨</span>
-                    <p>She has big, brilliant dreams. On the days she doubts herself the most — those are the days I'm most certain she's going to conquer everything.</p>
-                </div>
-
-                <div class="sticky pink reveal-fade" style="--r: -3deg; --tx: 0px; --ty: 0px;">
-                    <span class="sticky-icon">🌸</span>
-                    <p>She has the softest heart. The way she cares for people — genuinely, deeply — makes the world a better place just by her existing in it.</p>
-                </div>
-
-                <div class="sticky lavender reveal-fade" style="--r: 2deg; --tx: 0px; --ty: 0px;">
-                    <span class="sticky-icon">🎀</span>
-                    <p>She doesn't even know how rare she is. That's the most Vaishnavi thing about her.</p>
-                </div>
-
             </div>
 
-            <div class="ch-photo-row reveal-fade">
-                <div class="img-placeholder" style="height:280px; border-radius:24px; flex:1; min-width:220px;">
-                    <span class="ph-icon">📸</span><span>Her photo</span>
+            <!-- WIDGET 3: HER JOURNEY (FILM STRIP) -->
+            <div class="bento-card card-journey glass-card" id="widget-journey">
+                <div class="card-glow" style="background: radial-gradient(circle, rgba(255, 154, 92, 0.12) 0%, transparent 70%);"></div>
+                <div class="card-body">
+                    <div class="card-icon">🎞️</div>
+                    <h2 class="card-title">Her Journey</h2>
+                    <p class="card-desc">A cinematic timeline of the milestones that made her, her.</p>
+                    <div class="film-strip-preview">
+                        <div class="preview-frame">2007 🍼</div>
+                        <div class="preview-frame">2017 🏫</div>
+                        <div class="preview-frame">Now ✨</div>
+                    </div>
                 </div>
-                <div class="img-placeholder" style="height:280px; border-radius:24px; flex:1; min-width:220px;">
-                    <span class="ph-icon">📸</span><span>Another one</span>
+                <span class="action-hint">Explore Journey →</span>
+            </div>
+
+            <!-- WIDGET 4: THE MOMENT (CINEMATIC WRAPPER) -->
+            <div class="bento-card card-moment glass-card" id="widget-moment">
+                <div class="card-glow" style="background: radial-gradient(circle, rgba(255, 77, 166, 0.12) 0%, transparent 70%);"></div>
+                <div class="card-body">
+                    <div class="card-icon">💫</div>
+                    <h2 class="card-title">The Moment</h2>
+                    <p class="card-desc">"There are moments that split your life into before and after. This was one of them."</p>
+                    <div class="moment-peek-wrap">
+                        <div class="moment-peek-badge">✒️ Journal Note</div>
+                    </div>
+                </div>
+                <span class="action-hint">Read Journal Entry →</span>
+            </div>
+
+            <!-- WIDGET 5: LOVE LETTER (WAX-SEAL ENVELOPE) -->
+            <div class="bento-card card-envelope-widget glass-card" id="widget-envelope">
+                <div class="card-glow" style="background: radial-gradient(circle, rgba(146, 84, 222, 0.15) 0%, transparent 70%);"></div>
+                <div class="envelope-outer-wrap">
+                    <div class="envelope-back"></div>
+                    <div class="envelope-paper-preview">
+                        <div class="preview-writing">Dear Vaishnavi...</div>
+                    </div>
+                    <div class="envelope-front"></div>
+                    <div class="envelope-flap"></div>
+                    <div class="wax-seal" id="wax-seal">
+                        <div class="seal-inner">❤</div>
+                    </div>
+                </div>
+                <h3 class="envelope-card-title">A Letter Just For Her</h3>
+                <span class="action-hint" id="seal-hint">Tap Wax Seal to Open 💌</span>
+            </div>
+
+            <!-- WIDGET 6: MEMORY POLAROIDS -->
+            <div class="bento-card card-polaroids glass-card" id="widget-polaroids">
+                <div class="card-glow" style="background: radial-gradient(circle, rgba(255, 77, 166, 0.15) 0%, transparent 70%);"></div>
+                <div class="card-body">
+                    <div class="card-icon">📸</div>
+                    <h2 class="card-title">Memory Polaroids</h2>
+                    <p class="card-desc">Our best chapters, captured in cute Polaroid snaps.</p>
+                    <div class="polaroid-preview-stack">
+                        <div class="mini-polaroid p1">🌅</div>
+                        <div class="mini-polaroid p2">🍕</div>
+                        <div class="mini-polaroid p3">😂</div>
+                    </div>
+                </div>
+                <span class="action-hint">Open Album 💕</span>
+            </div>
+
+            <!-- WIDGET 7: COMPLIMENT JAR -->
+            <div class="bento-card card-love-jar glass-card" id="widget-love-jar">
+                <div class="card-glow" style="background: radial-gradient(circle, rgba(255, 154, 92, 0.15) 0%, transparent 70%);"></div>
+                <div class="card-body">
+                    <div class="jar-graphic-wrap">
+                        <div class="love-jar-graphic" id="love-jar-click">
+                            <div class="jar-lid"></div>
+                            <div class="jar-neck"></div>
+                            <div class="jar-body">
+                                <div class="jar-tag">Vaishnavi's Jar</div>
+                                <div class="jar-hearts">
+                                    <span class="j-heart h1">💖</span>
+                                    <span class="j-heart h2">🌸</span>
+                                    <span class="j-heart h3">✨</span>
+                                    <span class="j-heart h4">💕</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 class="card-title">Love Jar</h2>
+                    <p class="card-desc">Click the jar to pull out a little reason why you're amazing.</p>
+                </div>
+                <div class="compliment-bubble hidden" id="compliment-bubble">
+                    <p id="compliment-text">Click the jar! ✨</p>
                 </div>
             </div>
 
         </div>
-    </section>
+
+        <footer class="db-footer">
+            <p class="footer-note">Some stories are lived slowly, sweetly, and with the kind of love you don't need to shout about. 💕</p>
+            <div class="footer-hearts">
+                <span>💕</span><span>🌸</span><span>💖</span><span>🌸</span><span>💕</span>
+            </div>
+        </footer>
+    </div>
 
     <!-- ╔══════════════════════════════════════╗
-         ║  CHAPTER 2 — HER JOURNEY            ║
+         ║  OVERLAY MODALS                      ║
          ╚══════════════════════════════════════╝ -->
-    <section class="chapter hidden" id="ch-2" data-chapter="2">
-        <div class="ch-scroll-y">
-            <div class="ch-header">
+
+    <!-- MODAL 1: WHO SHE IS BOOKLET -->
+    <div class="modal-overlay hidden" id="modal-who">
+        <button class="btn-close" aria-label="Close Book">&times;</button>
+        <div class="book-container">
+            <div class="book" id="flip-book">
+                
+                <!-- COVER PAGE (Page 1) -->
+                <div class="book-page first-page" style="z-index: 10;">
+                    <div class="page-content book-cover">
+                        <div class="cover-design">
+                            <span class="cover-emoji">🎀</span>
+                            <h2>Who She Is</h2>
+                            <p>A folder of wonderful traits & memories</p>
+                            <span class="flip-hint">Click next to open booklet →</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE 2: BIRTHDAY -->
+                <div class="book-page" style="z-index: 9;">
+                    <div class="page-content">
+                        <span class="page-num">01</span>
+                        <div class="sticky pink">
+                            <span class="sticky-icon">🎂</span>
+                            <h3>August 5, 2007</h3>
+                            <p>She came into this world on August 5, 2007. The world got significantly cuter that day and nobody even announced it.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE 3: SMILE -->
+                <div class="book-page" style="z-index: 8;">
+                    <div class="page-content">
+                        <span class="page-num">02</span>
+                        <div class="sticky lavender">
+                            <span class="sticky-icon">😊</span>
+                            <h3>Her Smile</h3>
+                            <p>Her smile is honestly unfair. Like it should be regulated. One second you're fine, then she smiles and suddenly nothing else matters.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE 4: SILLY & SMART -->
+                <div class="book-page" style="z-index: 7;">
+                    <div class="page-content">
+                        <span class="page-num">03</span>
+                        <div class="sticky peach">
+                            <span class="sticky-icon">🤪</span>
+                            <h3>Silly & Smart</h3>
+                            <p>She is a dangerous mix of silly and smart. You'll be laughing with her and then realise she just said something actually really deep.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE 5: QUIET STRENGTH -->
+                <div class="book-page" style="z-index: 6;">
+                    <div class="page-content">
+                        <span class="page-num">04</span>
+                        <div class="sticky pink">
+                            <span class="sticky-icon">💪</span>
+                            <h3>Quiet Strength</h3>
+                            <p>She handles things quietly. No drama, no breakdown — she just figures it out. And it amazes me every single time.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE 6: HOME -->
+                <div class="book-page" style="z-index: 5;">
+                    <div class="page-content">
+                        <span class="page-num">05</span>
+                        <div class="sticky lavender">
+                            <span class="sticky-icon">🌙</span>
+                            <h3>Feels Like Home</h3>
+                            <p>Being around her just feels like home. Safe. Warm. Like everything is going to be absolutely fine.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE 7: DREAMS -->
+                <div class="book-page" style="z-index: 4;">
+                    <div class="page-content">
+                        <span class="page-num">06</span>
+                        <div class="sticky peach">
+                            <span class="sticky-icon">✨</span>
+                            <h3>Big Dreams</h3>
+                            <p>She has big, brilliant dreams. On the days she doubts herself the most — those are the days I'm most certain she's going to conquer everything.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE 8: HEART -->
+                <div class="book-page" style="z-index: 3;">
+                    <div class="page-content">
+                        <span class="page-num">07</span>
+                        <div class="sticky pink">
+                            <span class="sticky-icon">🌸</span>
+                            <h3>Soft Heart</h3>
+                            <p>She has the softest heart. The way she cares for people — genuinely, deeply — makes the world a better place just by her existing in it.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAGE 9: RARE -->
+                <div class="book-page" style="z-index: 2;">
+                    <div class="page-content">
+                        <span class="page-num">08</span>
+                        <div class="sticky lavender">
+                            <span class="sticky-icon">🎀</span>
+                            <h3>Uniquely Vaishnavi</h3>
+                            <p>She doesn't even know how rare she is. That's the most Vaishnavi thing about her.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BACK COVER / PHOTOS (Page 10) -->
+                <div class="book-page last-page" style="z-index: 1;">
+                    <div class="page-content book-back">
+                        <h3>Our Photos</h3>
+                        <div class="book-photo-row">
+                            <div class="img-placeholder" style="height:120px; border-radius:12px; flex:1; min-width:80px;">
+                                <span class="ph-icon">📸</span>
+                            </div>
+                            <div class="img-placeholder" style="height:120px; border-radius:12px; flex:1; min-width:80px;">
+                                <span class="ph-icon">📸</span>
+                            </div>
+                        </div>
+                        <p class="back-text">To be continued... 🌸</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="book-controls">
+                <button class="btn-page" id="btn-page-prev">← Previous</button>
+                <button class="btn-page" id="btn-page-next">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: JOURNEY TIMELINE -->
+    <div class="modal-overlay hidden" id="modal-journey">
+        <button class="btn-close" aria-label="Close Journey">&times;</button>
+        <div class="journey-modal-content">
+            <div class="modal-header">
                 <div class="chapter-num">02</div>
                 <h2 class="ch-title">Her Journey</h2>
                 <p class="ch-sub">Every chapter that made her, her 🌟</p>
+                <p class="swipe-hint">← Drag or Scroll Sideways to Explore →</p>
             </div>
+            
+            <div class="film-strip-wrap" id="journey-film-wrap">
+                <div class="film-strip">
 
-            <p class="swipe-hint">← Scroll sideways to explore →</p>
-
-            <div class="film-strip-wrap">
-                <div class="film-strip" id="film-strip">
-
-                    <div class="film-card reveal-fade">
+                    <div class="film-card">
                         <div class="film-year">2007</div>
-                        <div class="img-placeholder" style="height:220px; border-radius:20px;">
+                        <div class="img-placeholder" style="height:200px; border-radius:16px;">
                             <span class="ph-icon">🍼</span><span>Baby photo</span>
                         </div>
                         <h3 class="film-title">The Beginning</h3>
                         <p class="film-body">August 5, 2007. She arrived quietly and changed everything. A little girl with the softest eyes and already, somehow, the whole world in her future.</p>
                     </div>
 
-                    <div class="film-card reveal-fade">
+                    <div class="film-card">
                         <div class="film-year">2010–13</div>
-                        <div class="img-placeholder" style="height:220px; border-radius:20px;">
+                        <div class="img-placeholder" style="height:200px; border-radius:16px;">
                             <span class="ph-icon">🎠</span><span>Childhood photo</span>
                         </div>
                         <h3 class="film-title">The Curious Years</h3>
                         <p class="film-body">Tiny shoes, big questions. She was that kid who looked at everything like it was the most interesting thing she'd ever seen. Curious. Bright. Absolutely adorable.</p>
                     </div>
 
-                    <div class="film-card reveal-fade">
+                    <div class="film-card">
                         <div class="film-year">2014–17</div>
-                        <div class="img-placeholder" style="height:220px; border-radius:20px;">
+                        <div class="img-placeholder" style="height:200px; border-radius:16px;">
                             <span class="ph-icon">📚</span><span>School photo</span>
                         </div>
                         <h3 class="film-title">School Days</h3>
                         <p class="film-body">She quietly became someone people noticed — not because she tried to, but because she just is. Lessons, friends, growing up — she did all of it in her own perfect way.</p>
                     </div>
 
-                    <div class="film-card reveal-fade">
+                    <div class="film-card">
                         <div class="film-year">2018–21</div>
-                        <div class="img-placeholder" style="height:220px; border-radius:20px;">
+                        <div class="img-placeholder" style="height:200px; border-radius:16px;">
                             <span class="ph-icon">🌺</span><span>Growing up photo</span>
                         </div>
                         <h3 class="film-title">Becoming Her</h3>
                         <p class="film-body">She started finding her voice. Her opinions, her humour, her style — all becoming uniquely, undeniably <em>her</em>. This is when she stopped just growing and started blooming.</p>
                     </div>
 
-                    <div class="film-card reveal-fade">
+                    <div class="film-card">
                         <div class="film-year">2022–Now</div>
-                        <div class="img-placeholder" style="height:220px; border-radius:20px;">
+                        <div class="img-placeholder" style="height:200px; border-radius:16px;">
                             <span class="ph-icon">✨</span><span>Recent photo</span>
                         </div>
                         <h3 class="film-title">Right Now</h3>
@@ -176,62 +402,53 @@
 
                 </div>
             </div>
-
         </div>
-    </section>
+    </div>
 
-    <!-- ╔══════════════════════════════════════╗
-         ║  CHAPTER 3 — THE MOMENT             ║
-         ╚══════════════════════════════════════╝ -->
-    <section class="chapter hidden" id="ch-3" data-chapter="3">
-        <div class="ch-scroll-y moment-wrap">
-
+    <!-- MODAL 3: THE MOMENT -->
+    <div class="modal-overlay hidden" id="modal-moment">
+        <button class="btn-close" aria-label="Close Journal">&times;</button>
+        <div class="moment-modal-content glass-card">
             <div class="moment-glow"></div>
-
-            <div class="ch-header">
+            <div class="modal-header">
                 <div class="chapter-num">03</div>
                 <h2 class="ch-title">The Moment</h2>
                 <p class="ch-sub">When I first really noticed her ✨</p>
             </div>
 
-            <div class="moment-quote reveal-fade">
+            <div class="moment-quote">
                 "There are moments that split your life into before and after.&nbsp;<br>
                 This was one of them."
             </div>
 
-            <div class="moment-photo reveal-fade">
-                <div class="img-placeholder" style="height:340px; border-radius:28px; max-width:460px; margin:0 auto;">
+            <div class="moment-photo">
+                <div class="img-placeholder" style="height:280px; border-radius:20px; max-width:400px; margin:0 auto;">
                     <span class="ph-icon">💫</span>
                     <span>The photo that captures it</span>
                 </div>
             </div>
 
-            <div class="moment-journal glass-card reveal-fade">
+            <div class="moment-journal glass-card">
                 <div class="journal-date">A note I wrote to myself</div>
-    <p>
-        i think it was that day i first saw her. she was just being herself, laughing over coffee, and i felt something click.<br/>
-        i remember thinking, "{{her-name}} is the one." and i haven't stopped feeling that ever since.
-    </p>
+                <p>
+                    i think it was that day i first saw her. she was just being herself, laughing over coffee, and i felt something click.<br/>
+                    i remember thinking, "Vaishnavi is the one." and i haven't stopped feeling that ever since.
+                </p>
             </div>
-
         </div>
-    </section>
+    </div>
 
-    <!-- ╔══════════════════════════════════════╗
-         ║  CHAPTER 4 — US                     ║
-         ╚══════════════════════════════════════╝ -->
-    <section class="chapter hidden" id="ch-4" data-chapter="4">
-        <div class="ch-scroll-y">
-
-            <div class="ch-header">
+    <!-- MODAL 4: POLAROIDS ALBUM -->
+    <div class="modal-overlay hidden" id="modal-polaroids">
+        <button class="btn-close" aria-label="Close Album">&times;</button>
+        <div class="polaroids-modal-content">
+            <div class="modal-header">
                 <div class="chapter-num">04</div>
-                <h2 class="ch-title">Us</h2>
-                <p class="ch-sub">The best chapter so far 💕</p>
+                <h2 class="ch-title">Our Album</h2>
+                <p class="ch-sub">Click a polaroid to view it larger 💕</p>
             </div>
 
-            <!-- Memory Polaroids -->
-            <div class="polaroid-board reveal-fade">
-
+            <div class="polaroid-board">
                 <div class="polaroid" style="--r: -4deg">
                     <div class="img-placeholder" style="height:200px; border-radius:8px;">
                         <span class="ph-icon">🌅</span>
@@ -259,34 +476,15 @@
                     </div>
                     <div class="polaroid-caption">Midnight conversations 🌙</div>
                 </div>
-
             </div>
+        </div>
+    </div>
 
-            <!-- Live Counter -->
-            <div class="counter-block glass-card reveal-fade">
-                <div class="counter-label">She's been making my world better for...</div>
-                <div class="counter-grid">
-                    <div class="c-pill">
-                        <span class="c-val" id="count-years">0</span>
-                        <span class="c-lbl">Years</span>
-                    </div>
-                    <div class="c-pill">
-                        <span class="c-val" id="count-months">0</span>
-                        <span class="c-lbl">Months</span>
-                    </div>
-                    <div class="c-pill">
-                        <span class="c-val" id="count-days">0</span>
-                        <span class="c-lbl">Days</span>
-                    </div>
-                    <div class="c-pill highlight">
-                        <span class="c-val" id="count-seconds">0</span>
-                        <span class="c-lbl">Seconds</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Love Letter -->
-            <div class="letter-wrap reveal-fade">
+    <!-- MODAL 5: FULL LOVE LETTER -->
+    <div class="modal-overlay hidden" id="modal-letter">
+        <button class="btn-close" aria-label="Close Letter">&times;</button>
+        <div class="letter-modal-content">
+            <div class="letter-wrap">
                 <div class="letter-chip">💌 A Note Just For Her</div>
                 <div class="letter-paper glass-card">
                     <div
@@ -297,43 +495,21 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Footer -->
-            <div class="ch-footer reveal-fade">
-                <p class="footer-note">Some stories are lived slowly, sweetly, and with the kind of love you don't need to shout about. 💕</p>
-                <div class="footer-hearts">
-                    <span>💕</span><span>🌸</span><span>💖</span><span>🌸</span><span>💕</span>
-                </div>
-            </div>
-
         </div>
-    </section>
+    </div>
 
-    <!-- ╔══════════════════════════════════════╗
-         ║  FLOATING CHAPTER DOCK              ║
-         ╚══════════════════════════════════════╝ -->
-    <nav class="chapter-dock" id="chapter-dock" aria-label="Chapter Navigation">
-        <button class="dock-btn active" data-target="0" id="dock-0" aria-label="Her World">
-            <span class="dock-icon">🌸</span>
-            <span class="dock-label">Her World</span>
-        </button>
-        <button class="dock-btn" data-target="1" id="dock-1" aria-label="Who She Is">
-            <span class="dock-icon">✨</span>
-            <span class="dock-label">Who She Is</span>
-        </button>
-        <button class="dock-btn" data-target="2" id="dock-2" aria-label="Her Journey">
-            <span class="dock-icon">🌟</span>
-            <span class="dock-label">Her Journey</span>
-        </button>
-        <button class="dock-btn" data-target="3" id="dock-3" aria-label="The Moment">
-            <span class="dock-icon">💫</span>
-            <span class="dock-label">The Moment</span>
-        </button>
-        <button class="dock-btn" data-target="4" id="dock-4" aria-label="Us">
-            <span class="dock-icon">💕</span>
-            <span class="dock-label">Us</span>
-        </button>
-    </nav>
+    <!-- FULLSCREEN PHOTO PREVIEWER -->
+    <div class="photo-preview-overlay hidden" id="photo-previewer">
+        <button class="btn-preview-close">&times;</button>
+        <div class="preview-box">
+            <img src="" alt="Enlarged photo view" class="preview-img" id="previewer-img">
+            <div class="preview-placeholder img-placeholder" id="previewer-placeholder">
+                <span class="ph-icon">📸</span>
+                <span class="preview-placeholder-text">Photo Frame</span>
+            </div>
+            <div class="preview-caption" id="previewer-caption"></div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
