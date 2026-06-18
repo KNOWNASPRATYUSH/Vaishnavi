@@ -285,11 +285,22 @@ function runFlip(forward) {
 
         // Front = current right page (the page being turned away)
         flipperFront.style.borderRadius = '0 18px 18px 0';
-        flipperFront.innerHTML = rightInner.innerHTML;
+        flipperFront.innerHTML = renderBookPage(bookRightIdx);
 
         // Back = new photo (revealed on the left after the flip)
         flipperBack.style.borderRadius  = '18px 0 0 18px';
         flipperBack.innerHTML = renderLeftPhotoPanel(targetIdx);
+        
+        // Right panel is revealed immediately behind the flipping page, so update it at 0ms
+        rightInner.innerHTML = renderBookPage(targetIdx);
+        document.getElementById('right-page-num').textContent = targetIdx > 0 ? `${targetIdx}` : '';
+        
+        // Left panel is hidden until flipper lands, so update it at midpoint
+        setTimeout(() => {
+            bookRightIdx = targetIdx;
+            leftInner.innerHTML = renderLeftPhotoPanel(bookRightIdx);
+            updateBookUI();
+        }, 350);
 
     } else {
         // Flipper covers LEFT panel (photo side) → rotates right
@@ -305,21 +316,23 @@ function runFlip(forward) {
         // Back = new right page content (revealed as the flipper lands on the right side)
         flipperBack.style.borderRadius  = '0 18px 18px 0';
         flipperBack.innerHTML = renderBookPage(targetIdx);
+        
+        // Left panel is revealed immediately behind the flipping page, so update it at 0ms
+        leftInner.innerHTML = renderLeftPhotoPanel(targetIdx);
+        
+        // Right panel is hidden until flipper lands, so update it at midpoint
+        setTimeout(() => {
+            bookRightIdx = targetIdx;
+            rightInner.innerHTML = renderBookPage(bookRightIdx);
+            document.getElementById('right-page-num').textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
+            updateBookUI();
+        }, 350);
     }
 
     // Show the flipper at 0deg (no animation yet)
     flipper.style.transform  = 'rotateY(0deg)';
     flipper.style.transition = 'none';
     flipper.classList.add('is-flipping');
-
-    // At midpoint: update the underlying panels (hidden behind the turning flipper)
-    setTimeout(() => {
-        bookRightIdx = targetIdx;
-        leftInner.innerHTML = renderLeftPhotoPanel(bookRightIdx);
-        rightInner.innerHTML = renderBookPage(bookRightIdx);
-        document.getElementById('right-page-num').textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
-        updateBookUI();
-    }, 350);
 
     // Kick off the CSS 3D rotation
     requestAnimationFrame(() => {
