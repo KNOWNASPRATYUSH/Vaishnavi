@@ -354,14 +354,11 @@ const widgetEnvelope = document.getElementById('widget-envelope');
 
 if (waxSeal && modalLetter) {
     waxSeal.addEventListener('click', (e) => {
-        e.stopPropagation(); // Avoid triggering container clicks
-        
-        // Break seal animation
+        e.stopPropagation();
         waxSeal.classList.add('broken');
-        
-        // After seal breaks, zoom open the love letter modal
         setTimeout(() => {
             openModal(modalLetter);
+            loadLetter(); // Load latest from cloud
         }, 700);
     });
 }
@@ -369,6 +366,7 @@ if (waxSeal && modalLetter) {
 if (widgetEnvelope && modalLetter) {
     widgetEnvelope.addEventListener('click', () => {
         openModal(modalLetter);
+        loadLetter(); // Load latest from cloud
     });
 }
 
@@ -577,14 +575,26 @@ updateCounter();
 setInterval(updateCounter, 1000);
 
 // ─────────────────────────────────────────────────────────────────
-// 10. LOVE LETTER — Save button + localStorage persistence
+// 10. LOVE LETTER — Firebase Cloud Sync + localStorage fallback
+//
+// HOW TO ENABLE CROSS-DEVICE SYNC (takes ~2 minutes):
+//  1. Go to https://console.firebase.google.com
+//  2. Click "Add project" → give it any name → Continue
+//  3. Disable Google Analytics → Create project
+//  4. Left sidebar → Build → Realtime Database → Create database
+//  5. Choose any region → Start in TEST MODE → Enable
+//  6. Copy the database URL shown (looks like:
+//     https://your-project-default-rtdb.firebaseio.com)
+//  7. Paste it below as FIREBASE_DB_URL
 // ─────────────────────────────────────────────────────────────────
+const FIREBASE_DB_URL = ''; // <-- PASTE YOUR FIREBASE URL HERE
+const LETTER_ENDPOINT = `${FIREBASE_DB_URL}/vaishnavi_letter.json`;
+const STORAGE_KEY     = 'vaishnavi_love_letter_v2';
+
 const letterEl      = document.getElementById('love-letter-content');
 const btnSaveLetter = document.getElementById('btn-save-letter');
 const saveToast     = document.getElementById('save-toast');
-const STORAGE_KEY   = 'vaishnavi_love_letter_v2';
 
-// Default content shown if nothing saved yet
 const defaultLetter = `Dear Vaishnavi,
 
 I just wanted to make this little corner of the internet for you. 
@@ -596,32 +606,76 @@ Feel free to write your own notes or edit this letter whenever you want. It's ou
 Love,
 Me 💕`;
 
-if (letterEl) {
-    // Restore saved letter or show default
+/** Load letter: cloud first, localStorage fallback */
+async function loadLetter() {
+    if (!letterEl) return;
+
+    if (FIREBASE_DB_URL) {
+        try {
+            const res  = await fetch(LETTER_ENDPOINT);
+            const data = await res.json();
+            if (data && data.content) {
+                letterEl.innerHTML = data.content;
+                localStorage.setItem(STORAGE_KEY, data.content); // keep local in sync
+                return;
+            }
+        } catch (e) {
+            console.warn('Cloud load failed, using local:', e);
+        }
+    }
+
+    // Fallback: localStorage or default
     const saved = localStorage.getItem(STORAGE_KEY);
     letterEl.innerHTML = saved ? saved : defaultLetter.replace(/\n/g, '<br>');
+}
 
-    // Auto-save silently on every keystroke (safety net)
+/** Save letter: cloud + localStorage */
+async function saveLetter() {
+    if (!letterEl) return;
+    const content = letterEl.innerHTML;
+
+    // Always save locally
+    localStorage.setItem(STORAGE_KEY, content);
+
+    if (FIREBASE_DB_URL) {
+        try {
+            await fetch(LETTER_ENDPOINT, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content, updatedAt: Date.now() })
+            });
+            return true; // cloud save succeeded
+        } catch (e) {
+            console.warn('Cloud save failed:', e);
+            return false;
+        }
+    }
+    return null; // no cloud configured
+}
+
+// Auto-save to localStorage on every keystroke (silent safety net)
+if (letterEl) {
     letterEl.addEventListener('input', () => {
         localStorage.setItem(STORAGE_KEY, letterEl.innerHTML);
     });
 }
 
-// Save button — explicit save + toast feedback
+// Save button: cloud + toast feedback
 let toastTimer;
 if (btnSaveLetter && letterEl && saveToast) {
-    btnSaveLetter.addEventListener('click', () => {
-        // Save to localStorage
-        localStorage.setItem(STORAGE_KEY, letterEl.innerHTML);
-
-        // Show toast
+    btnSaveLetter.addEventListener('click', async () => {
+        // Show "Saving..." immediately
+        saveToast.textContent = FIREBASE_DB_URL ? '⏳ Syncing...' : '⏳ Saving...';
         saveToast.classList.add('show');
-
-        // Hide toast after 2.5s
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-            saveToast.classList.remove('show');
-        }, 2500);
+
+        const result = await saveLetter();
+
+        if (result === true)       saveToast.textContent = '✨ Saved & Synced!';
+        else if (result === false)  saveToast.textContent = '⚠️ Saved locally only';
+        else                        saveToast.textContent = '✨ Saved!';
+
+        toastTimer = setTimeout(() => saveToast.classList.remove('show'), 2800);
     });
 }
 
