@@ -302,9 +302,9 @@ function runFlip(forward) {
         flipperFront.style.borderRadius = '18px 0 0 18px';
         flipperFront.innerHTML = renderLeftPhotoPanel(bookRightIdx);
 
-        // Back = new right page content (though usually it just looks like the back of the previous page)
+        // Back = new right page content (revealed as the flipper lands on the right side)
         flipperBack.style.borderRadius  = '0 18px 18px 0';
-        flipperBack.innerHTML = '';
+        flipperBack.innerHTML = renderBookPage(targetIdx);
     }
 
     // Show the flipper at 0deg (no animation yet)
