@@ -908,7 +908,9 @@ async function sendChatMessage() {
     if (!text || !FIREBASE_DB_URL) return;
     
     const sender = senderToggle.checked ? 'Vaishnavi' : 'Pratyush';
-    const msg = { text, sender, time: Date.now() };
+    
+    // Use Firebase Server Timestamp to prevent out-of-order messages from device clock differences
+    const msg = { text, sender, time: { ".sv": "timestamp" } };
     
     chatInput.value = ''; // clear input
     
