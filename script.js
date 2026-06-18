@@ -169,7 +169,7 @@ document.querySelectorAll('.modal-overlay').forEach(modal => {
 
 const BOOK_PAGES = [
     { type: 'cover',   emoji: '🎀', title: 'Who She Is',        subtitle: 'A folder of wonderful traits & memories', image: 'images/img3.jpg' },
-    { type: 'note', color: 'pink',     emoji: '🎂', title: 'August 5, 2007',     text: 'She came into this world on August 5, 2007. The world got significantly cuter that day and nobody even announced it.', image: 'images/img1.jpg' },
+    { type: 'note', color: 'pink',     emoji: '🎂', title: 'August 5, 2007',     text: 'She came into this world on August 5, 2007. The world got significantly cuter that day and nobody even announced it.', image: 'images/img1.jpg', imgPos: 'top' },
     { type: 'note', color: 'lavender', emoji: '😊', title: 'Her Smile',          text: "Her smile is honestly unfair. Like it should be regulated. One second you're fine, then she smiles and suddenly nothing else matters.", image: 'images/img8.jpg' },
     { type: 'note', color: 'peach',    emoji: '🤪', title: 'Silly & Smart',      text: "She is a dangerous mix of silly and smart. You'll be laughing with her and then realise she just said something actually really deep.", image: 'images/img6.jpg' },
     { type: 'note', color: 'pink',     emoji: '💪', title: 'Quiet Strength',     text: "She handles things quietly. No drama, no breakdown — she just figures it out. And it amazes me every single time.", image: 'images/img11.jpg' },
@@ -191,7 +191,7 @@ function renderLeftPhotoPanel(idx) {
       <div class="page-photo-panel">
         <div class="book-photo-wrap">
           <div class="book-hero-photo" id="book-hero-photo">
-            <img src="${p.image}" alt="Vaishnavi" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">
+            <img src="${p.image}" alt="Vaishnavi" style="width:100%; height:100%; object-fit:cover; object-position:${p.imgPos || 'center'}; border-radius:10px;">
           </div>
           <div class="book-photo-caption">${p.title} 🌸</div>
         </div>
