@@ -177,7 +177,7 @@ const BOOK_PAGES = [
     { type: 'note', color: 'peach',    emoji: '✨', title: 'Big Dreams',         text: "She has big, brilliant dreams. On the days she doubts herself — those are the days I'm most certain she'll conquer everything.", image: 'images/img4.jpg' },
     { type: 'note', color: 'pink',     emoji: '🌸', title: 'Soft Heart',         text: "She has the softest heart. The way she cares for people — genuinely, deeply — makes the world a better place just by her existing in it.", image: 'images/img5.jpg' },
     { type: 'note', color: 'lavender', emoji: '🎀', title: 'Uniquely Vaishnavi', text: "She doesn't even know how rare she is. That's the most Vaishnavi thing about her.", image: 'images/img10.jpg' },
-    { type: 'back',    emoji: '💕', title: 'To be continued...', text: 'Every page of her story is better than the last.', image: 'images/img2.jpg' },
+    { type: 'back',    emoji: '💕', title: 'To be continued...', text: 'Every page of her story is better than the last.', image: 'images/img12.png' },
 ];
 
 let bookRightIdx  = 0;
