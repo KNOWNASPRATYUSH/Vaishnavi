@@ -47,7 +47,7 @@
          ╚══════════════════════════════════════╝ -->
     <div id="main-dashboard" class="dashboard-wrap hidden">
         <header class="db-header">
-            <h1 class="db-title" id="main-title">Vaishnavi's Universe 🌸</h1>
+            <h1 class="db-title">Vaishnavi's Universe 🌸</h1>
             <p class="db-subtitle">Every little thing that makes her special, captured in one interactive space.</p>
         </header>
 
@@ -183,6 +183,17 @@
                 <div class="compliment-bubble hidden" id="compliment-bubble">
                     <p id="compliment-text">Click the jar! ✨</p>
                 </div>
+            </div>
+
+            <!-- WIDGET 8: PRIVATE CHAT -->
+            <div class="bento-card card-chat glass-card" id="widget-chat">
+                <div class="card-glow" style="background: radial-gradient(circle, rgba(146, 84, 222, 0.15) 0%, transparent 70%);"></div>
+                <div class="card-body">
+                    <div class="card-icon">💬</div>
+                    <h2 class="card-title">Our Space</h2>
+                    <p class="card-desc">A private, secure place just for us to talk.</p>
+                </div>
+                <span class="action-hint">Enter PIN 🔒</span>
             </div>
 
         </div>
@@ -383,6 +394,18 @@
                 <span class="preview-placeholder-text">Photo Frame</span>
             </div>
             <div class="preview-caption" id="previewer-caption"></div>
+        </div>
+    </div>
+
+    <!-- PIN ENTRY MODAL -->
+    <div class="modal-overlay hidden" id="pin-modal">
+        <button class="btn-close" id="btn-close-pin" aria-label="Close">&times;</button>
+        <div class="pin-container glass-card" style="padding: 2rem; text-align: center; max-width: 300px;">
+            <h2 style="margin-bottom: 0.5rem; font-family: 'Pacifico', cursive; color: var(--text-dark);">Enter PIN</h2>
+            <p style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-med);">This space is locked.</p>
+            <input type="password" id="pin-input" maxlength="4" placeholder="••••" autocomplete="off" style="width: 100%; text-align: center; font-size: 2rem; letter-spacing: 10px; padding: 0.5rem; border-radius: 12px; border: 2px solid var(--pink-light); outline: none; color: var(--text-dark); margin-bottom: 1rem;">
+            <button class="btn-unlock-pin" id="btn-submit-pin" style="width: 100%; padding: 0.8rem; border-radius: 24px; border: none; background: var(--grad-title); color: white; font-weight: bold; cursor: pointer; font-family: 'Quicksand', sans-serif;">Unlock Chat</button>
+            <p id="pin-error" class="hidden" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 10px; font-weight: bold;">Incorrect PIN ❌</p>
         </div>
     </div>
 

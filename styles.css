@@ -417,6 +417,16 @@ body::before {
     grid-row: span 1;
 }
 
+.card-chat {
+    grid-column: span 12;
+    grid-row: span 1;
+    align-items: center;
+    text-align: center;
+}
+.card-chat .card-icon {
+    margin: 0 auto 0.8rem;
+}
+
 /* ─────────────────────────────────────────────
    WIDGET GRAPHICS & DESIGNS
    ───────────────────────────────────────────── */

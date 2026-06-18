@@ -754,7 +754,12 @@ document.addEventListener('keydown', e => {
 // ─────────────────────────────────────────────────────────────────
 // 13. SECRET CHAT (HIDDEN)
 // ─────────────────────────────────────────────────────────────────
-const mainTitle = document.getElementById('main-title');
+const widgetChat = document.getElementById('widget-chat');
+const pinModal = document.getElementById('pin-modal');
+const pinInput = document.getElementById('pin-input');
+const btnSubmitPin = document.getElementById('btn-submit-pin');
+const btnClosePin = document.getElementById('btn-close-pin');
+const pinError = document.getElementById('pin-error');
 const secretChatModal = document.getElementById('secret-chat-modal');
 const btnCloseChat = document.getElementById('btn-close-chat');
 const chatMessages = document.getElementById('chat-messages');
@@ -763,24 +768,39 @@ const btnSendChat = document.getElementById('btn-send-chat');
 const senderToggle = document.getElementById('sender-toggle-input');
 const senderLabel = document.getElementById('sender-label');
 
-let titleClicks = 0;
-let titleClickTimer;
 let chatPollInterval;
 
-if (mainTitle) {
-    mainTitle.style.cursor = 'pointer'; // Give a tiny hint or just make it clickable
-    mainTitle.addEventListener('click', () => {
-        titleClicks++;
-        clearTimeout(titleClickTimer);
-        
-        if (titleClicks >= 5) {
-            titleClicks = 0;
-            openSecretChat();
-        } else {
-            titleClickTimer = setTimeout(() => {
-                titleClicks = 0;
-            }, 1000);
-        }
+// Open PIN modal when clicking the chat widget
+if (widgetChat) {
+    widgetChat.addEventListener('click', () => {
+        pinInput.value = '';
+        pinError.classList.add('hidden');
+        pinModal.classList.remove('hidden');
+        setTimeout(() => pinInput.focus(), 100);
+    });
+}
+
+// Verify PIN logic
+function verifyPinAndOpenChat() {
+    if (pinInput.value === '0517') {
+        pinModal.classList.add('hidden');
+        openSecretChat();
+    } else {
+        pinError.classList.remove('hidden');
+        pinInput.value = '';
+        pinInput.focus();
+    }
+}
+
+if (btnSubmitPin) btnSubmitPin.addEventListener('click', verifyPinAndOpenChat);
+if (pinInput) {
+    pinInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') verifyPinAndOpenChat();
+    });
+}
+if (btnClosePin) {
+    btnClosePin.addEventListener('click', () => {
+        pinModal.classList.add('hidden');
     });
 }
 
