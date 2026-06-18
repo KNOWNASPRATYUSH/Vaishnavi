@@ -47,7 +47,7 @@
          ╚══════════════════════════════════════╝ -->
     <div id="main-dashboard" class="dashboard-wrap hidden">
         <header class="db-header">
-            <h1 class="db-title">Vaishnavi's Universe 🌸</h1>
+            <h1 class="db-title" id="main-title">Vaishnavi's Universe 🌸</h1>
             <p class="db-subtitle">Every little thing that makes her special, captured in one interactive space.</p>
         </header>
 
@@ -386,6 +386,38 @@
         </div>
     </div>
 
+    <!-- SECRET CHAT MODAL -->
+    <div class="modal-overlay hidden" id="secret-chat-modal">
+        <button class="btn-close" id="btn-close-chat" aria-label="Close Chat">&times;</button>
+        <div class="chat-container glass-card">
+            <div class="chat-header">
+                <span class="chat-title">Secret Space 🤫</span>
+                <div class="sender-toggle">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sender-toggle-input">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="sender-label" id="sender-label">Me (Pratyush)</span>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be injected here -->
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Whisper something..." autocomplete="off">
+                <button id="btn-send-chat" class="btn-send-chat">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+      (function(){
+         emailjs.init("cj0qnAWsdo7vhxV-s");
+      })();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

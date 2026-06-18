@@ -611,16 +611,6 @@ setInterval(updateCounter, 1000);
 
 // ─────────────────────────────────────────────────────────────────
 // 10. LOVE LETTER — Firebase Cloud Sync + localStorage fallback
-//
-// HOW TO ENABLE CROSS-DEVICE SYNC (takes ~2 minutes):
-//  1. Go to https://console.firebase.google.com
-//  2. Click "Add project" → give it any name → Continue
-//  3. Disable Google Analytics → Create project
-//  4. Left sidebar → Build → Realtime Database → Create database
-//  5. Choose any region → Start in TEST MODE → Enable
-//  6. Copy the database URL shown (looks like:
-//     https://your-project-default-rtdb.firebaseio.com)
-//  7. Paste it below as FIREBASE_DB_URL
 // ─────────────────────────────────────────────────────────────────
 const FIREBASE_DB_URL = 'https://vaishnavibday-eeb65-default-rtdb.firebaseio.com'; // Firebase Realtime DB
 const LETTER_ENDPOINT = `${FIREBASE_DB_URL}/vaishnavi_letter.json`;
@@ -679,6 +669,13 @@ async function saveLetter() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ content, updatedAt: Date.now() })
             });
+
+            // Trigger Email Notification
+            if (typeof emailjs !== 'undefined') {
+                emailjs.send("service_2jq4x1f", "template_6b9y4vm", {
+                    message: "A new note was saved in the Love Letter section!"
+                }).catch(err => console.warn('EmailJS error:', err));
+            }
             return true; // cloud save succeeded
         } catch (e) {
             console.warn('Cloud save failed:', e);
@@ -752,4 +749,146 @@ document.addEventListener('keydown', e => {
         if (e.key === 'ArrowRight') runFlip(true);
         if (e.key === 'ArrowLeft')  runFlip(false);
     }
+});
+
+// ─────────────────────────────────────────────────────────────────
+// 13. SECRET CHAT (HIDDEN)
+// ─────────────────────────────────────────────────────────────────
+const mainTitle = document.getElementById('main-title');
+const secretChatModal = document.getElementById('secret-chat-modal');
+const btnCloseChat = document.getElementById('btn-close-chat');
+const chatMessages = document.getElementById('chat-messages');
+const chatInput = document.getElementById('chat-input');
+const btnSendChat = document.getElementById('btn-send-chat');
+const senderToggle = document.getElementById('sender-toggle-input');
+const senderLabel = document.getElementById('sender-label');
+
+let titleClicks = 0;
+let titleClickTimer;
+let chatPollInterval;
+
+if (mainTitle) {
+    mainTitle.style.cursor = 'pointer'; // Give a tiny hint or just make it clickable
+    mainTitle.addEventListener('click', () => {
+        titleClicks++;
+        clearTimeout(titleClickTimer);
+        
+        if (titleClicks >= 5) {
+            titleClicks = 0;
+            openSecretChat();
+        } else {
+            titleClickTimer = setTimeout(() => {
+                titleClicks = 0;
+            }, 1000);
+        }
+    });
+}
+
+function openSecretChat() {
+    if (!secretChatModal) return;
+    secretChatModal.classList.remove('hidden');
+    loadChatMessages();
+    // Poll every 3 seconds while open
+    clearInterval(chatPollInterval);
+    chatPollInterval = setInterval(loadChatMessages, 3000);
+}
+
+if (btnCloseChat) {
+    btnCloseChat.addEventListener('click', () => {
+        secretChatModal.classList.add('hidden');
+        clearInterval(chatPollInterval);
+    });
+}
+
+if (senderToggle) {
+    senderToggle.addEventListener('change', (e) => {
+        senderLabel.textContent = e.target.checked ? 'Her (Vaishnavi)' : 'Me (Pratyush)';
+        loadChatMessages(); // Refresh alignment based on identity
+    });
+}
+
+async function loadChatMessages() {
+    if (!FIREBASE_DB_URL || !chatMessages) return;
+    try {
+        const res = await fetch(`${FIREBASE_DB_URL}/secret_chat.json`);
+        const data = await res.json();
+        renderChat(data);
+    } catch (e) {
+        console.warn('Chat load failed', e);
+    }
+}
+
+function renderChat(data) {
+    if (!chatMessages) return;
+    
+    // Check if user scrolled up manually before we refresh
+    const isAtBottom = chatMessages.scrollHeight - chatMessages.scrollTop <= chatMessages.clientHeight + 50;
+
+    chatMessages.innerHTML = '';
+    if (!data) return;
+    
+    const messages = Object.values(data).sort((a, b) => a.time - b.time);
+    const currentName = senderToggle.checked ? 'Vaishnavi' : 'Pratyush';
+
+    messages.forEach(msg => {
+        const isSentByMe = msg.sender === currentName;
+        const b = document.createElement('div');
+        b.className = `chat-bubble ${isSentByMe ? 'sent' : 'received'}`;
+        
+        const date = new Date(msg.time);
+        const hours = date.getHours();
+        const mins = date.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const displayHours = hours % 12 || 12;
+        const timeStr = `${displayHours}:${mins} ${ampm}`;
+        
+        b.innerHTML = `
+            ${msg.text}
+            <div class="chat-time">${timeStr}</div>
+        `;
+        chatMessages.appendChild(b);
+    });
+    
+    if (isAtBottom) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+}
+
+async function sendChatMessage() {
+    const text = chatInput.value.trim();
+    if (!text || !FIREBASE_DB_URL) return;
+    
+    const sender = senderToggle.checked ? 'Vaishnavi' : 'Pratyush';
+    const msg = { text, sender, time: Date.now() };
+    
+    chatInput.value = ''; // clear input
+    
+    // Add locally immediately for instant feedback
+    const b = document.createElement('div');
+    b.className = 'chat-bubble sent';
+    b.innerHTML = `${text} <div class="chat-time">Just now</div>`;
+    chatMessages.appendChild(b);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    try {
+        await fetch(`${FIREBASE_DB_URL}/secret_chat.json`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(msg)
+        });
+        
+        // Trigger Email Notification
+        if (typeof emailjs !== 'undefined') {
+            emailjs.send("service_2jq4x1f", "template_6b9y4vm", {
+                message: `New secret message from ${sender}: "${text}"`
+            }).catch(err => console.warn('EmailJS error:', err));
+        }
+    } catch (e) {
+        console.error('Failed to send msg', e);
+    }
+}
+
+if (btnSendChat) btnSendChat.addEventListener('click', sendChatMessage);
+if (chatInput) chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendChatMessage();
 });
