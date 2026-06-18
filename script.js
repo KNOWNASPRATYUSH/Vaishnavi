@@ -274,47 +274,36 @@ function runFlip(forward) {
     const rightInner   = document.getElementById('right-page-inner');
     if (!flipper || !flipperFront || !flipperBack) { bookAnimating = false; return; }
 
-    const isMobile = window.innerWidth <= 680;
     const targetIdx = forward ? bookRightIdx + 1 : bookRightIdx - 1;
-
-    if (isMobile) {
-        bookRightIdx = targetIdx;
-        leftInner.innerHTML = renderLeftPhotoPanel(bookRightIdx);
-        rightInner.innerHTML = renderBookPage(bookRightIdx);
-        document.getElementById('right-page-num').textContent = bookRightIdx > 0 ? `${bookRightIdx}` : '';
-        updateBookUI();
-        bookAnimating = false;
-        return;
-    }
 
     if (forward) {
         // Flipper covers RIGHT panel → rotates left (toward spine)
         flipper.style.left         = 'auto';
         flipper.style.right        = '0';
-        flipper.style.width        = isMobile ? '100%' : '50%';
+        flipper.style.width        = '50%';
         flipper.style.transformOrigin = 'left center';
 
         // Front = current right page (the page being turned away)
-        flipperFront.style.borderRadius = isMobile ? '18px' : '0 18px 18px 0';
+        flipperFront.style.borderRadius = '0 18px 18px 0';
         flipperFront.innerHTML = rightInner.innerHTML;
 
         // Back = new photo (revealed on the left after the flip)
-        flipperBack.style.borderRadius  = isMobile ? '18px' : '18px 0 0 18px';
+        flipperBack.style.borderRadius  = '18px 0 0 18px';
         flipperBack.innerHTML = renderLeftPhotoPanel(targetIdx);
 
     } else {
         // Flipper covers LEFT panel (photo side) → rotates right
         flipper.style.right        = 'auto';
         flipper.style.left         = '0';
-        flipper.style.width        = isMobile ? '100%' : '50%';
+        flipper.style.width        = '50%';
         flipper.style.transformOrigin = 'right center';
 
         // Front = current photo panel (the left side being "unflipped")
-        flipperFront.style.borderRadius = isMobile ? '18px' : '18px 0 0 18px';
+        flipperFront.style.borderRadius = '18px 0 0 18px';
         flipperFront.innerHTML = renderLeftPhotoPanel(bookRightIdx);
 
         // Back = new right page content (though usually it just looks like the back of the previous page)
-        flipperBack.style.borderRadius  = isMobile ? '18px' : '0 18px 18px 0';
+        flipperBack.style.borderRadius  = '0 18px 18px 0';
         flipperBack.innerHTML = '';
     }
 
@@ -357,8 +346,40 @@ function initBook() {
 
 const btnPrevPage = document.getElementById('btn-page-prev');
 const btnNextPage = document.getElementById('btn-page-next');
+
 if (btnNextPage) btnNextPage.addEventListener('click', () => runFlip(true));
 if (btnPrevPage) btnPrevPage.addEventListener('click', () => runFlip(false));
+
+// ─────────────────────────────────────────────────────────────────
+// SWIPE GESTURES FOR BOOK FLIPPING
+// ─────────────────────────────────────────────────────────────────
+const bookSpread = document.getElementById('book-spread-wrapper');
+if (bookSpread) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    bookSpread.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    bookSpread.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleBookSwipe();
+    }, { passive: true });
+
+    function handleBookSwipe() {
+        const diff = touchEndX - touchStartX;
+        if (Math.abs(diff) > 50) { // Threshold for swipe
+            if (diff < 0) {
+                // Swiped left -> next page
+                runFlip(true);
+            } else {
+                // Swiped right -> previous page
+                runFlip(false);
+            }
+        }
+    }
+}
 
 // ─────────────────────────────────────────────────────────────────
 // 5. WAX SEAL & ENVELOPE INTERACTION
