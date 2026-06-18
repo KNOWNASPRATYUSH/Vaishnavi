@@ -329,10 +329,20 @@ function runFlip(forward) {
         }, 350);
     }
 
+    // Ensure opacity is reset for the new animation
+    flipperFront.style.opacity = '1';
+    flipperBack.style.opacity = '0';
+
     // Show the flipper at 0deg (no animation yet)
     flipper.style.transform  = 'rotateY(0deg)';
     flipper.style.transition = 'none';
     flipper.classList.add('is-flipping');
+
+    // At midpoint (90 degrees): hide front face, show back face to fix Safari 3D bleed bug
+    setTimeout(() => {
+        flipperFront.style.opacity = '0';
+        flipperBack.style.opacity = '1';
+    }, 350);
 
     // Kick off the CSS 3D rotation
     requestAnimationFrame(() => {
