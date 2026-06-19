@@ -7,6 +7,17 @@
 'use strict';
 
 // ─────────────────────────────────────────────────────────────────
+// 0. PRELOADER LOGIC
+// ─────────────────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('site-preloader');
+    if (preloader) {
+        preloader.classList.add('hidden');
+        setTimeout(() => preloader.remove(), 600); // Remove from DOM after fade out
+    }
+});
+
+// ─────────────────────────────────────────────────────────────────
 // 1. BACKGROUND BUBBLES
 // ─────────────────────────────────────────────────────────────────
 (function spawnBubbles() {
