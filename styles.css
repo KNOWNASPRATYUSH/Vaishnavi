@@ -122,6 +122,13 @@ body::before {
                 box-shadow 0.3s ease;
 }
 
+@media (max-width: 768px) {
+    .glass-card {
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+    }
+}
+
 .glass-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--glass-hover);

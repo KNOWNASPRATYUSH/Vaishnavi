@@ -20,7 +20,10 @@
         'radial-gradient(circle at 30% 30%, rgba(180,220,255,0.9), rgba(100,170,255,0.35))',
     ];
 
-    for (let i = 0; i < 20; i++) {
+    const isMobile = window.innerWidth <= 768;
+    const numBubbles = isMobile ? 8 : 20;
+
+    for (let i = 0; i < numBubbles; i++) {
         const el  = document.createElement('div');
         el.className = 'bg-bubble';
 
@@ -30,7 +33,6 @@
             height:            `${size}px`,
             left:              `${Math.random() * 100}vw`,
             background:        COLORS[Math.floor(Math.random() * COLORS.length)],
-            filter:            `blur(${size > 80 ? 10 : 5}px)`,
             animationDuration: `${Math.random() * 14 + 10}s`,
             animationDelay:    `-${Math.random() * 18}s`,
         });
