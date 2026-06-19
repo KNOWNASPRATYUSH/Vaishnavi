@@ -88,6 +88,7 @@ body::before {
     border-radius: 50%;
     opacity: 0;
     animation: floatBubble linear infinite;
+    will-change: transform;
 }
 
 @keyframes floatBubble {

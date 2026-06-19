@@ -218,7 +218,7 @@ function renderLeftPhotoPanel(idx) {
       <div class="page-photo-panel">
         <div class="book-photo-wrap">
           <div class="book-hero-photo" id="book-hero-photo">
-            <img src="${p.image}" alt="Vaishnavi" style="width:100%; height:100%; object-fit:cover; object-position:${p.imgPos || 'center'}; border-radius:10px;">
+            <img src="${p.image}" loading="lazy" alt="Vaishnavi" style="width:100%; height:100%; object-fit:cover; object-position:${p.imgPos || 'center'}; border-radius:10px;">
           </div>
           <div class="book-photo-caption">${p.title} 🌸</div>
         </div>
