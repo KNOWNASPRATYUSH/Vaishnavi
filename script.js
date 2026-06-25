@@ -83,7 +83,7 @@ function checkBirthday() {
         const currentYear = today.getFullYear().toString();
         const lastSeenYear = localStorage.getItem('birthdaySeenYear');
 
-        if (lastSeenYear !== currentYear) {
+        if (true || lastSeenYear !== currentYear) { // FOR TESTING: ALWAYS SHOW MODAL
             // First time accessing today
             const bdayModal = document.getElementById('modal-birthday');
             if (bdayModal) openModal(bdayModal);
