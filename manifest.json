@@ -1,7 +1,7 @@
 {
   "name": "Vaishnavi's Universe",
   "short_name": "Vaishnavi",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#0d0a14",
   "theme_color": "#ff4da6",
