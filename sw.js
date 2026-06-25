@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vaishnavi-universe-v4';
+const CACHE_NAME = 'vaishnavi-universe-v5';
 const urlsToCache = [
   './',
   './index.html',

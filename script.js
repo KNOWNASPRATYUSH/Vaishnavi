@@ -73,17 +73,27 @@ if (btnUnlock && introCurtain && mainDashboard) {
     });
 }
 
-function checkBirthday() {
-    const today = new Date();
+async function checkBirthday() {
+    let today = new Date();
+    try {
+        const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Kolkata');
+        if (response.ok) {
+            const data = await response.json();
+            today = new Date(data.datetime);
+        }
+    } catch (e) {
+        console.warn('Could not fetch world time, falling back to device time.', e);
+    }
+
     // August is month 7 in JS Date (0-indexed), Date is 5
-    if (true || (today.getMonth() === 7 && today.getDate() === 5)) { // FOR TESTING: ALWAYS TRUE
+    if (today.getMonth() === 7 && today.getDate() === 5) {
         const badge = document.getElementById('birthday-badge');
         if (badge) badge.classList.remove('hidden');
 
         const currentYear = today.getFullYear().toString();
         const lastSeenYear = localStorage.getItem('birthdaySeenYear');
 
-        if (true || lastSeenYear !== currentYear) { // FOR TESTING: ALWAYS SHOW MODAL
+        if (lastSeenYear !== currentYear) {
             // First time accessing today
             const bdayModal = document.getElementById('modal-birthday');
             if (bdayModal) openModal(bdayModal);
