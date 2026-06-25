@@ -1,11 +1,11 @@
-const CACHE_NAME = 'vaishnavi-universe-v1';
+const CACHE_NAME = 'vaishnavi-universe-v2';
 const urlsToCache = [
-  './',
-  './index.html',
-  './styles.css',
-  './script.js',
-  './manifest.json',
-  './images/img13.png'
+  '/',
+  '/index.html',
+  '/styles.css',
+  '/script.js',
+  '/manifest.json',
+  '/images/img13.png'
 ];
 
 self.addEventListener('install', event => {
@@ -43,9 +43,13 @@ self.addEventListener('fetch', event => {
                 cache.put(event.request, responseToCache);
               });
 
-            return response;
           }
-        );
+        ).catch(() => {
+          // If network fetch fails (e.g., offline) and it's a navigation request, return the cached root
+          if (event.request.mode === 'navigate') {
+            return caches.match('/');
+          }
+        });
       })
   );
 });
