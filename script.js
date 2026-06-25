@@ -76,7 +76,7 @@ if (btnUnlock && introCurtain && mainDashboard) {
 function checkBirthday() {
     const today = new Date();
     // August is month 7 in JS Date (0-indexed), Date is 5
-    if (today.getMonth() === 7 && today.getDate() === 5) {
+    if (true || (today.getMonth() === 7 && today.getDate() === 5)) { // FOR TESTING: ALWAYS TRUE
         const badge = document.getElementById('birthday-badge');
         if (badge) badge.classList.remove('hidden');
 
