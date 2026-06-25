@@ -1060,3 +1060,54 @@ if (btnChatCamera && chatCameraInput) {
         chatCameraInput.value = '';
     });
 }
+
+// -----------------------------------------------------------------
+// 15. PWA SETUP
+// -----------------------------------------------------------------
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, err => {
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    });
+}
+
+let deferredPrompt;
+const btnInstallApp = document.getElementById('btn-install-app');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent the mini-infobar from appearing on mobile
+    e.preventDefault();
+    // Stash the event so it can be triggered later.
+    deferredPrompt = e;
+    // Update UI notify the user they can install the PWA
+    if(btnInstallApp) {
+        btnInstallApp.classList.remove('hidden');
+    }
+});
+
+if(btnInstallApp) {
+    btnInstallApp.addEventListener('click', (e) => {
+        // Hide the app provided install promotion
+        btnInstallApp.classList.add('hidden');
+        // Show the install prompt
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                } else {
+                    console.log('User dismissed the install prompt');
+                }
+                deferredPrompt = null;
+            });
+        }
+    });
+}
+
+window.addEventListener('appinstalled', (evt) => {
+    console.log('INSTALL: Success');
+});

@@ -1,0 +1,17 @@
+{
+  "name": "Vaishnavi's Universe",
+  "short_name": "Vaishnavi",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d0a14",
+  "theme_color": "#ff4da6",
+  "description": "An interactive universe made just for Vaishnavi — her journey, her story, and the moment everything changed.",
+  "icons": [
+    {
+      "src": "images/img13.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
