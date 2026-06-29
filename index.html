@@ -65,7 +65,10 @@
         <header class="db-header">
             <h1 class="db-title">Vaishnavi's Universe 🌸</h1>
             <p class="db-subtitle">Every little thing that makes her special, captured in one interactive space.</p>
-            <button id="btn-install-app" class="btn-install hidden" aria-label="Install App">Install App 📱</button>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                <button id="btn-install-app" class="btn-install hidden" aria-label="Install App">Install App 📱</button>
+                <button id="btn-enable-notifications" class="btn-install" aria-label="Enable Notifications">Get Notifications 🔔</button>
+            </div>
         </header>
 
         <div class="bento-grid">
@@ -498,6 +501,7 @@
          emailjs.init("cj0qnAWsdo7vhxV-s");
       })();
     </script>
+    <script type="module" src="firebase-setup.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

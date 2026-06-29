@@ -73,6 +73,17 @@ if (btnUnlock && introCurtain && mainDashboard) {
     });
 }
 
+const btnNotify = document.getElementById('btn-enable-notifications');
+if (btnNotify) {
+    btnNotify.addEventListener('click', () => {
+        if (window.requestNotificationPermission) {
+            window.requestNotificationPermission();
+        } else {
+            alert('Push notifications are still loading or not supported.');
+        }
+    });
+}
+
 async function checkBirthday() {
     let today = new Date();
     try {
